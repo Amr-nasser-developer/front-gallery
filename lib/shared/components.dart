@@ -48,3 +48,26 @@ Widget defaultTextField({String? validatorText , bool obscure = false, String? h
     ),
   ),
 );
+
+Widget buildHome({@required String? name, @required IconData? iconData, function})=> GestureDetector(
+  onTap: function,
+  child: Container(
+    child: Row(
+      children: [
+        CircleAvatar(backgroundColor: Colors.pink, child: Icon(iconData, color: Colors.white,),),
+        SizedBox(width: 15.0,),
+        Expanded(
+          child: Text(
+            '${name}',
+            style: TextStyle(color: Colors.white,fontSize: 22.0, fontWeight: FontWeight.bold),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      Spacer()
+        ,
+        Icon(Icons.arrow_forward_ios_sharp,color: Colors.white,)
+      ],
+    ),
+  ),
+);
