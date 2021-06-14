@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gallary/layout/cubit/cubit.dart';
+import 'package:gallary/layout/cubit/state.dart';
 import 'package:gallary/module/login/login_screen.dart';
-import 'package:gallary/module/register/cubit/cubit.dart';
 import 'package:gallary/shared/components.dart';
-import 'cubit/state.dart';
 
 class RegisterPage extends StatelessWidget{
   final GlobalKey<FormState> _globalKey = GlobalKey();
