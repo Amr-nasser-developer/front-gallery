@@ -180,6 +180,26 @@ class GalleryCubit extends Cubit<GalleryStates> {
       emit(GalleryCreateProductError(e.toString()));
     });
   }
+  updateProduct({ar , en , cost, availabilty, thumb,id }){
+    emit(GalleryUpdateProductLoading());
+    DioHelper.postData(
+      data: {
+        'name' : {
+          "'ar'" : ar,
+          "'en'" : en,
+        },
+        'cost' : cost,
+        'availabilty': availabilty,
+        'thumb' : thumb
+      },
+      url: 'dashboard/v1/products/$id/update',
+    ).then((value){
+      emit(GalleryUpdateProductSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryUpdateProductError(e.toString()));
+    });
+  }
   deleteProduct({id}){
     emit(GalleryDeleteProductLoading());
     DioHelper.postData(

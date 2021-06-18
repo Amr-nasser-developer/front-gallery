@@ -9,15 +9,16 @@ import 'package:gallary/layout/cubit/state.dart';
 import 'package:gallary/shared/components.dart';
 
 class ProductScreen extends StatelessWidget {
+  var arNameController = TextEditingController();
+  var enNameController = TextEditingController();
+  var costController = TextEditingController();
+  var availableController = TextEditingController();
+  var searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey();
     GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-    var arNameController = TextEditingController();
-    var enNameController = TextEditingController();
-    var costController = TextEditingController();
-    var availableController = TextEditingController();
-    var searchController = TextEditingController();
+
     return BlocConsumer<GalleryCubit, GalleryStates>(
       listener: (context, state) {
         if (state is GalleryDeleteProductSuccess) {
@@ -26,9 +27,11 @@ class ProductScreen extends StatelessWidget {
         if (state is GalleryCreateProductSuccess) {
           GalleryCubit.get(context).listProduct();
         }
+        if (state is GalleryUpdateProductSuccess) {
+          GalleryCubit.get(context).listProduct();
+        }
       },
       builder: (context, state) {
-        double height = MediaQuery.of(context).size.height;
         return Scaffold(
           key: scaffoldKey,
           body: SingleChildScrollView(
@@ -65,7 +68,7 @@ class ProductScreen extends StatelessWidget {
                   ),
                   ConditionalBuilder(
                     condition: GalleryListProductLoading != null,
-                    builder: (context) => buildProduct(GalleryCubit.get(context).viewProduct, context),
+                    builder: (context) => buildProduct(GalleryCubit.get(context).viewProduct, context,formKey,scaffoldKey),
                     fallback: (context) => Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -96,7 +99,7 @@ class ProductScreen extends StatelessWidget {
                               type: TextInputType.name,
                               function: arNameController),
                           SizedBox(
-                            height: height * 0.02,
+                            height: 5.0,
                           ),
                           defaultTextField(
                               validatorText: 'Enter Your EnglishName',
@@ -104,7 +107,7 @@ class ProductScreen extends StatelessWidget {
                               type: TextInputType.name,
                               function: enNameController),
                           SizedBox(
-                            height: height * 0.02,
+                            height: 5.0,
                           ),
                           defaultTextField(
                               validatorText: 'Enter Your Cost',
@@ -112,7 +115,7 @@ class ProductScreen extends StatelessWidget {
                               type: TextInputType.number,
                               function: costController),
                           SizedBox(
-                            height: height * 0.02,
+                            height: 5.0,
                           ),
                           defaultTextField(
                               validatorText: 'Enter Your Available',
@@ -120,7 +123,7 @@ class ProductScreen extends StatelessWidget {
                               type: TextInputType.number,
                               function: availableController),
                           SizedBox(
-                            height: height * 0.04,
+                            height: 5.0,
                           ),
                           ConditionalBuilder(
                             condition: state is! GalleryCreateProductLoading
@@ -174,7 +177,7 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  Widget buildProduct(viewProduct, context) => Column(
+  Widget buildProduct(viewProduct, context,formKey,scaffoldKey) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Padding(
@@ -199,11 +202,11 @@ class ProductScreen extends StatelessWidget {
           children: List.generate(
               viewProduct.length,
                   (index) => buildGridProduct(
-                  viewProduct[index], context)))
+                  viewProduct[index], context,formKey,scaffoldKey)))
 
     ],
   );
-  Widget buildGridProduct(model, context) => Container(
+  Widget buildGridProduct(model, context,formKey,scaffoldKey) => Container(
     color: Colors.white,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,10 +233,110 @@ class ProductScreen extends StatelessWidget {
                 CircleAvatar(
                   child: IconButton(
                       onPressed: () {
-                        GalleryCubit.get(context).deleteProduct(id: '${model['id']}');
+                        GalleryCubit.get(context).deleteProduct(
+                          id: '${model['id']}'
+                        );
                       },
                       icon: Icon(
                         Icons.delete_forever,
+                        size: 16.0,
+                      )),
+                  radius: 16.0,
+                ),
+                SizedBox(width: 15.0,),
+                CircleAvatar(
+                  child: IconButton(
+                      onPressed: () {
+                        if (GalleryCubit.get(context).isBottomSheetShownn) {
+                          if (formKey.currentState!.validate()) {}
+                        } else {
+                          scaffoldKey.currentState!.showBottomSheet(
+                                (context) => Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.all(
+                                20.0,
+                              ),
+                              child: Form(
+                                key: formKey,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    defaultTextField(
+                                        validatorText: 'Enter Your ArabicName',
+                                        hint: 'ArabicName',
+                                        type: TextInputType.name,
+                                        function: arNameController),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    defaultTextField(
+                                        validatorText: 'Enter Your EnglishName',
+                                        hint: 'EnglishName',
+                                        type: TextInputType.name,
+                                        function: enNameController),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    defaultTextField(
+                                        validatorText: 'Enter Your Cost',
+                                        hint: 'Cost',
+                                        type: TextInputType.number,
+                                        function: costController),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    defaultTextField(
+                                        validatorText: 'Enter Your Available',
+                                        hint: 'Available',
+                                        type: TextInputType.number,
+                                        function: availableController),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 80),
+                                      child : FlatButton(
+                                        color: Colors.black,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(120)
+                                        ),
+                                        onPressed: (){
+                                          if(formKey.currentState!.validate()){
+                                            GalleryCubit.get(context).updateProduct(
+                                              id: '${model['id']}',
+                                              ar: arNameController.text,
+                                              en: enNameController.text,
+                                              cost: costController.text,
+                                              availabilty: availableController.text,
+                                            );
+                                          }
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Update',style: TextStyle(color: Colors.white),),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            elevation: 20.0,
+                          )
+                              .closed
+                              .then((value) {
+                            GalleryCubit.get(context).changeBottomSheetStatee(
+                              isShow: false,
+                              icon: Icons.edit,
+                            );
+                          });
+
+                          GalleryCubit.get(context).changeBottomSheetStatee(
+                            isShow: true,
+                            icon: Icons.add,
+                          );
+                        }
+                      },
+                      icon: Icon(
+                        Icons.update,
                         size: 16.0,
                       )),
                   radius: 16.0,

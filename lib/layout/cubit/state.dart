@@ -58,6 +58,12 @@ class GalleryDeleteProductError extends GalleryStates{
   final error;
   GalleryDeleteProductError(this.error);
 }
+class GalleryUpdateProductLoading extends GalleryStates{}
+class GalleryUpdateProductSuccess extends GalleryStates{}
+class GalleryUpdateProductError extends GalleryStates{
+  final error;
+  GalleryUpdateProductError(this.error);
+}
 
 class GalleryMenuBar extends GalleryStates{}
 class AppChangeBottomSheetState extends GalleryStates{}
