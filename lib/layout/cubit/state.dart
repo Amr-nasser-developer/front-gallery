@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:gallary/model/login_model.dart';
 
 abstract class GalleryStates{}
@@ -41,6 +40,27 @@ class GalleryDeleteCustomerError extends GalleryStates{
   GalleryDeleteCustomerError(this.error);
 }
 
+class GalleryListProductLoading extends GalleryStates{}
+class GalleryListProductSuccess extends GalleryStates{}
+class GalleryListProductError extends GalleryStates{
+  final error;
+  GalleryListProductError(this.error);
+}
+class GalleryCreateProductLoading extends GalleryStates{}
+class GalleryCreateProductSuccess extends GalleryStates{}
+class GalleryCreateProductError extends GalleryStates{
+  final error;
+  GalleryCreateProductError(this.error);
+}
+class GalleryDeleteProductLoading extends GalleryStates{}
+class GalleryDeleteProductSuccess extends GalleryStates{}
+class GalleryDeleteProductError extends GalleryStates{
+  final error;
+  GalleryDeleteProductError(this.error);
+}
+
 class GalleryMenuBar extends GalleryStates{}
 class AppChangeBottomSheetState extends GalleryStates{}
+class AppChangeBottomSheetStatee extends GalleryStates{}
+class ImageLoadingState extends GalleryStates{}
 
