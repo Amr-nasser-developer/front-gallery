@@ -14,12 +14,7 @@ void main() async{
   DioHelper.init();
   await CashHelper.init();
   String token = await CashHelper.getData(key: 'token');
-  // var widget;
-  // if(token 0){
-  //   widget = HomePage();
-  // }else{
-  //   widget = OnBoarding();
-  // }
+  print(token);
   runApp(MyApp(token));
 }
 class MyApp extends StatelessWidget {
@@ -29,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (BuildContext context)=> GalleryCubit()..getCustomer(),)],
+        BlocProvider(create: (BuildContext context)=> GalleryCubit()..getCustomer()..listProduct(),)],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
