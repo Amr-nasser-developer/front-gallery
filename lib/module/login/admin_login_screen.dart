@@ -16,7 +16,15 @@ class AdminLoginPageState extends State<AdminLoginPage>{
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.indigo.shade900,
+        appBar: AppBar(
+          title: Text(
+            'Login Admin',
+            style: TextStyle(
+                fontSize: 24.0, fontWeight: FontWeight.bold ,color: Colors.white),
+          ),
+          backgroundColor: Colors.indigo.shade900 ,
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Form(
@@ -31,9 +39,10 @@ class AdminLoginPageState extends State<AdminLoginPage>{
                       alignment: Alignment.center,
                       children: <Widget>[
                         Image(image: AssetImage('assets/image/iconsBuy.png')),
+                        SizedBox(height: 15.0,),
                         Positioned(
                             bottom: 0,
-                            child: Text('Buy it' , style: TextStyle(fontFamily: 'pacifico' , fontSize: 25),)),
+                            child: Text('Gallery' , style: TextStyle(fontFamily: 'pacifico' , fontSize: 25),)),
                       ],
                     ),
                   ),
@@ -55,9 +64,9 @@ class AdminLoginPageState extends State<AdminLoginPage>{
                   cursorColor: Colors.orangeAccent,
                   obscureText: false,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email,color: Colors.orangeAccent,),
+                    prefixIcon: Icon(Icons.email,color: Colors.black,),
                     hintText: 'Enter Your Email',
-                    fillColor: Colors.pink,
+                    fillColor: Colors.white,
                     filled: true,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -86,9 +95,9 @@ class AdminLoginPageState extends State<AdminLoginPage>{
                   cursorColor: Colors.orangeAccent,
                   obscureText: true,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.lock,color: Colors.orangeAccent,),
+                    prefixIcon: Icon(Icons.lock,color: Colors.black,),
                     hintText: 'Enter Your Password',
-                    fillColor: Colors.pink,
+                    fillColor: Colors.white,
                     filled: true,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -137,10 +146,10 @@ class AdminLoginPageState extends State<AdminLoginPage>{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('are you Admin',style: TextStyle(color: Colors.orangeAccent),),
+                    Text('are you Admin ?',style: TextStyle(color: Colors.white),),
                     GestureDetector(
                         onTap: (){defaultNavigate(context: context, widget: LoginPage());},
-                        child: Text('are you User',style: TextStyle(color: Colors.white),)
+                        child: Text('are you User',style: TextStyle(color: Colors.indigo.shade900),)
                     ),
 
                   ],

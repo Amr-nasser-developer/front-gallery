@@ -8,10 +8,6 @@ import 'package:gallary/model/creat_customer_model.dart';
 import 'package:gallary/model/login_model.dart';
 import 'package:gallary/model/register_model.dart';
 import 'package:gallary/shared/network/remote/dio_helper.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
-import 'package:http_parser/http_parser.dart';
-import 'dart:convert';
 
 class GalleryCubit extends Cubit<GalleryStates> {
   GalleryCubit() : super(GalleryIntial());
@@ -77,14 +73,12 @@ class GalleryCubit extends Cubit<GalleryStates> {
     });
   }
 
-  // ListCustomer? listCustomer;
   List<dynamic> customer = [];
    getCustomer(){
      emit(GalleryGetCustomerLoading());
     DioHelper.getData(
         url: 'dashboard/v1/customers',
     ).then((value){
-      // listCustomer = ListCustomer.fromJson(value.data);
       customer = value.data['customers']['data'];
       emit(GalleryGetCustomerSuccess());
     }).catchError((e){
@@ -105,6 +99,26 @@ class GalleryCubit extends Cubit<GalleryStates> {
     }).catchError((e){
       print(e.toString());
       emit(GalleryDeleteCustomerError(e.toString()));
+    });
+  }
+
+  updateCustomer({enName, arName, phone, id}){
+    emit(GalleryUpdateCustomerLoading());
+    DioHelper.postData(
+      data: {
+        'name': {
+          'en': enName,
+          'ar': arName,
+
+        },
+        'phone' : phone
+      },
+      url: 'dashboard/v1/customers/$id/update',
+    ).then((value){
+      emit(GalleryUpdateCustomerSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryUpdateCustomerError(e.toString().characters.string));
     });
   }
 
@@ -144,6 +158,18 @@ class GalleryCubit extends Cubit<GalleryStates> {
     isBottomSheetShownn = isShow!;
     fabIconn = icon!;
     emit(AppChangeBottomSheetStatee());
+  }
+
+  bool isBottomSheetShownnn = false;
+  IconData fabIconnn = Icons.edit;
+
+  void changeBottomSheetStateee({
+    @required bool? isShow,
+    @required IconData? icon,
+  }) {
+    isBottomSheetShownnn = isShow!;
+    fabIconnn = icon!;
+    emit(AppChangeBottomSheetStateee());
   }
 
   List<dynamic> viewProduct = [];
@@ -214,5 +240,64 @@ class GalleryCubit extends Cubit<GalleryStates> {
       emit(GalleryDeleteProductError(e.toString()));
     });
   }
+ String id = '';
+  List<dynamic> viewUser = [];
+  listUser(){
+    emit(GalleryListUserLoading());
+    DioHelper.getData(
+      url: 'dashboard/v1/user',
+    ).then((value){
+      viewUser = value.data['users']['data'];
+      id = value.data['users']['data']['id'];
+      print(viewUser);
+      emit(GalleryListUserSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListUserError(e.toString()));
+    });
+  }
+  List< dynamic> passwordError = [];
+  updateUser({enName, arName, email, password, passwordConfirmation, role,id,departmentId}){
+    emit(GalleryUpdateUserLoading());
+    DioHelper.postData(
+      data: {
+        'name': {
+          'en': enName,
+          'ar': arName,
+
+        },
+        'department_id' : departmentId,
+        'email': email,
+        'password': password,
+        'password_confirmation': passwordConfirmation,
+        'role': role,
+      },
+      url: 'dashboard/v1/user/$id/update',
+    ).then((value){
+      passwordError = value.data['errors'];
+      print(passwordError);
+      emit(GalleryUpdateUserSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryUpdateUserError(e.toString().characters.string));
+    });
+  }
+
+  deleteUser({id}){
+    emit(GalleryDeleteUserLoading());
+    DioHelper.postData(
+      data: {
+        'id' : id
+      },
+      url: 'dashboard/v1/user/$id/delete',
+    ).then((value){
+      emit(GalleryDeleteUserSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryDeleteUserError(e.toString()));
+    });
+  }
+
+
 
 }

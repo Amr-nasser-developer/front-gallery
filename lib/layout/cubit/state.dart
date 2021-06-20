@@ -39,6 +39,12 @@ class GalleryDeleteCustomerError extends GalleryStates{
   final error;
   GalleryDeleteCustomerError(this.error);
 }
+class GalleryUpdateCustomerLoading extends GalleryStates{}
+class GalleryUpdateCustomerSuccess extends GalleryStates{}
+class GalleryUpdateCustomerError extends GalleryStates{
+  final error;
+  GalleryUpdateCustomerError(this.error);
+}
 
 class GalleryListProductLoading extends GalleryStates{}
 class GalleryListProductSuccess extends GalleryStates{}
@@ -64,9 +70,34 @@ class GalleryUpdateProductError extends GalleryStates{
   final error;
   GalleryUpdateProductError(this.error);
 }
+class GalleryListUserLoading extends GalleryStates{}
+class GalleryListUserSuccess extends GalleryStates{}
+class GalleryListUserError extends GalleryStates{
+  final error;
+  GalleryListUserError(this.error);
+}
+class GalleryCreateUserLoading extends GalleryStates{}
+class GalleryCreateUserSuccess extends GalleryStates{}
+class GalleryCreateUserError extends GalleryStates{
+  final error;
+  GalleryCreateUserError(this.error);
+}
+class GalleryUpdateUserLoading extends GalleryStates{}
+class GalleryUpdateUserSuccess extends GalleryStates{}
+class GalleryUpdateUserError extends GalleryStates{
+  final error;
+  GalleryUpdateUserError(this.error);
+}
+class GalleryDeleteUserLoading extends GalleryStates{}
+class GalleryDeleteUserSuccess extends GalleryStates{}
+class GalleryDeleteUserError extends GalleryStates{
+  final error;
+  GalleryDeleteUserError(this.error);
+}
 
 class GalleryMenuBar extends GalleryStates{}
 class AppChangeBottomSheetState extends GalleryStates{}
 class AppChangeBottomSheetStatee extends GalleryStates{}
+class AppChangeBottomSheetStateee extends GalleryStates{}
 class ImageLoadingState extends GalleryStates{}
 

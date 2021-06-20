@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallary/layout/cubit/cubit.dart';
 import 'package:gallary/layout/cubit/state.dart';
 import 'package:gallary/shared/components.dart';
@@ -22,17 +23,52 @@ class ProductScreen extends StatelessWidget {
     return BlocConsumer<GalleryCubit, GalleryStates>(
       listener: (context, state) {
         if (state is GalleryDeleteProductSuccess) {
+          Fluttertoast.showToast(
+              msg: 'Delete Product Successfully',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 3,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
           GalleryCubit.get(context).listProduct();
         }
         if (state is GalleryCreateProductSuccess) {
+          Fluttertoast.showToast(
+              msg: 'Create Product Successfully',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 3,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
           GalleryCubit.get(context).listProduct();
         }
         if (state is GalleryUpdateProductSuccess) {
+          Fluttertoast.showToast(
+              msg: 'Update Product Successfully',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 3,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
           GalleryCubit.get(context).listProduct();
         }
       },
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.indigo.shade900,
+            title: Text(
+              'Product',
+              style: TextStyle(
+                  fontSize: 24.0, fontWeight: FontWeight.bold ,color: Colors.white),
+            ),
+          ),
           key: scaffoldKey,
           body: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
@@ -41,12 +77,6 @@ class ProductScreen extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
-                  Text(
-                    'Product',
-                    style: TextStyle(
-                        fontSize: 24.0, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 15.0,),
                   TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -67,10 +97,11 @@ class ProductScreen extends StatelessWidget {
                     ),
                   ),
                   ConditionalBuilder(
-                    condition: GalleryListProductLoading != null,
-                    builder: (context) => buildProduct(GalleryCubit.get(context).viewProduct, context,formKey,scaffoldKey),
+                    condition: state is! GalleryListProductLoading,
+                    builder: (context) => buildProduct(GalleryCubit.get(context).viewProduct,
+                        context,formKey,scaffoldKey),
                     fallback: (context) => Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: Colors.black,),
                     ),
                   ),
                 ],
@@ -84,7 +115,7 @@ class ProductScreen extends StatelessWidget {
               } else {
                 scaffoldKey.currentState!.showBottomSheet(
                       (context) => Container(
-                    color: Colors.white,
+                    color: Colors.indigo.shade900,
                     padding: EdgeInsets.all(
                       20.0,
                     ),
@@ -94,8 +125,9 @@ class ProductScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           defaultTextField(
-                              validatorText: 'Enter Your ArabicName',
-                              hint: 'ArabicName',
+                            textAlign: TextAlign.end,
+                              validatorText: 'الاسم عربى',
+                              hint: 'الاسم عربى',
                               type: TextInputType.name,
                               function: arNameController),
                           SizedBox(
@@ -118,37 +150,30 @@ class ProductScreen extends StatelessWidget {
                             height: 5.0,
                           ),
                           defaultTextField(
-                              validatorText: 'Enter Your Available',
-                              hint: 'Available',
+                              validatorText: 'Available',
+                              hint: 'Yes/NO',
                               type: TextInputType.number,
                               function: availableController),
                           SizedBox(
                             height: 5.0,
                           ),
-                          ConditionalBuilder(
-                            condition: state is! GalleryCreateProductLoading
-                            , builder: (context)=> Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 80),
-                            child : FlatButton(
-                              color: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(120)
-                              ),
-                              onPressed: (){
-                                if(formKey.currentState!.validate()){
-                                  GalleryCubit.get(context).createProduct(
-                                      ar: arNameController.text,
-                                      en: enNameController.text,
-                                      cost: costController.text,
-                                      availabilty: availableController.text,
-                                  );
-                                }
-                                Navigator.pop(context);
-                              },
-                              child: Text('Add Product',style: TextStyle(color: Colors.white),),
+                          FlatButton(
+                            color: Colors.black,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(120)
                             ),
-                          ),
-                            fallback: (context)=> Center(child: CircularProgressIndicator(),),
+                            onPressed: (){
+                              if(formKey.currentState!.validate()){
+                                GalleryCubit.get(context).createProduct(
+                                  ar: arNameController.text,
+                                  en: enNameController.text,
+                                  cost: costController.text,
+                                  availabilty: availableController.text,
+                                );
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: Text('Add Product',style: TextStyle(color: Colors.white),),
                           ),
                         ],
                       ),
@@ -252,7 +277,7 @@ class ProductScreen extends StatelessWidget {
                         } else {
                           scaffoldKey.currentState!.showBottomSheet(
                                 (context) => Container(
-                              color: Colors.white,
+                              color: Colors.indigo.shade900,
                               padding: EdgeInsets.all(
                                 20.0,
                               ),
@@ -262,8 +287,9 @@ class ProductScreen extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     defaultTextField(
-                                        validatorText: 'Enter Your ArabicName',
-                                        hint: 'ArabicName',
+                                        validatorText: 'الاسم عربى',
+                                        textAlign: TextAlign.end,
+                                        hint: 'الاسم عربى',
                                         type: TextInputType.name,
                                         function: arNameController),
                                     SizedBox(
@@ -286,8 +312,8 @@ class ProductScreen extends StatelessWidget {
                                       height: 5.0,
                                     ),
                                     defaultTextField(
-                                        validatorText: 'Enter Your Available',
-                                        hint: 'Available',
+                                        validatorText: 'Available',
+                                        hint: 'Yes/No',
                                         type: TextInputType.number,
                                         function: availableController),
                                     SizedBox(

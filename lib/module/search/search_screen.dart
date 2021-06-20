@@ -5,7 +5,9 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.indigo.shade900,
+      ),
       body: Column(
         children: [
           Padding(
