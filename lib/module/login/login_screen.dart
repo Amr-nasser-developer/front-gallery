@@ -51,7 +51,15 @@ class LoginPage extends StatelessWidget{
           },
           builder: (context, state){
             return Scaffold(
-                backgroundColor: Colors.orangeAccent,
+                backgroundColor: Colors.indigo.shade900,
+                appBar: AppBar(
+                  title: Text(
+                    'Login User',
+                    style: TextStyle(
+                        fontSize: 24.0, fontWeight: FontWeight.bold ,color: Colors.white),
+                  ),
+                backgroundColor: Colors.indigo.shade900 ,
+                ),
                 body: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Form(
@@ -66,6 +74,7 @@ class LoginPage extends StatelessWidget{
                               alignment: Alignment.center,
                               children: <Widget>[
                                 Image(image: AssetImage('assets/image/iconsBuy.png')),
+                                SizedBox(height:15.0 ,),
                                 Positioned(
                                     bottom: 0,
                                     child: Text('Buy it' , style: TextStyle(fontFamily: 'pacifico' , fontSize: 25),)),
@@ -92,10 +101,10 @@ class LoginPage extends StatelessWidget{
                           obscureText: false,
                           controller: emailController,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.email,color: Colors.orangeAccent,),
+                            prefixIcon: Icon(Icons.email,color: Colors.black,),
                             hintText: 'Enter Your Email',
 
-                            fillColor: Colors.pink,
+                            fillColor: Colors.white,
                             filled: true,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -125,13 +134,13 @@ class LoginPage extends StatelessWidget{
                           controller: passwordController,
                           obscureText: GalleryCubit.get(context).isPassword,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.lock,color: Colors.orangeAccent,),
+                            prefixIcon: Icon(Icons.lock,color: Colors.black,),
                             suffixIcon: GalleryCubit.get(context).isPassword? IconButton(
-                               icon:Icon (Icons.visibility_outlined,color: Colors.white,), onPressed: (){
+                               icon:Icon (Icons.visibility_outlined,color: Colors.black,), onPressed: (){
                               GalleryCubit.get(context).showPassword();
-                            },): IconButton(onPressed: (){GalleryCubit.get(context).showPassword();}, icon:Icon(Icons.visibility_off_sharp),color: Colors.white,),
+                            },): IconButton(onPressed: (){GalleryCubit.get(context).showPassword();}, icon:Icon(Icons.visibility_off_sharp),color: Colors.black,),
                             hintText: 'Enter Your Password',
-                            fillColor: Colors.pink,
+                            fillColor: Colors.white,
                             filled: true,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -178,7 +187,7 @@ class LoginPage extends StatelessWidget{
                           children: <Widget>[
                             Text('Dont have an acount ?',style: TextStyle(color: Colors.white,fontSize: 16),),
                             GestureDetector(
-                              child: FlatButton(child: Text('Signup',style: TextStyle(color: Colors.black),),
+                              child: FlatButton(child: Text('Signup',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
                                 onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterPage()));},
                               ),
                             )
@@ -195,7 +204,7 @@ class LoginPage extends StatelessWidget{
                                 child: Text('are you Admin',style: TextStyle(color: Colors.white),
 
                                 )),
-                            Text('are you User',style: TextStyle(color: Colors.orangeAccent),)
+                            Text('are you User',style: TextStyle(color: Colors.indigo.shade900),)
                           ],
                         )
                       ],

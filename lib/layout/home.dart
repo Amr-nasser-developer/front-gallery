@@ -29,11 +29,16 @@ class HomePage extends StatelessWidget {
                 context: context,
                 widget: LoginPage()
             );
-          }, child: TextButton(child: Text('LogOut',style: TextStyle(color: Colors.white),),
-          onPressed: () => CashHelper.removeData(key: 'token').then((value) => finishNavigate(context: context,widget: LoginPage())),
+          }, child: Row(
+            children: [
+              TextButton(child: Text('LogOut',style: TextStyle(color: Colors.white),),
+              onPressed: () => CashHelper.removeData(key: 'token').then((value) => finishNavigate(context: context,widget: LoginPage())),
+              ),
+              Icon(Icons.logout,color: Colors.white,)
+            ],
           ))
         ],
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.indigo.shade900,
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),

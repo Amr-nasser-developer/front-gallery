@@ -49,7 +49,15 @@ class RegisterPage extends StatelessWidget{
         },
         builder: (context, state){
           return Scaffold(
-              backgroundColor: Colors.orangeAccent,
+              backgroundColor: Colors.indigo.shade900,
+              appBar: AppBar(
+                title: Text(
+                  'Register',
+                  style: TextStyle(
+                      fontSize: 24.0, fontWeight: FontWeight.bold ,color: Colors.white),
+                ),
+                backgroundColor: Colors.indigo.shade900 ,
+              ),
               body: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Form(
@@ -64,6 +72,7 @@ class RegisterPage extends StatelessWidget{
                             alignment: Alignment.center,
                             children: <Widget>[
                               Image(image: AssetImage('assets/image/iconsBuy.png')),
+                              SizedBox(height: 15.0,),
                               Positioned(
                                   bottom: 0,
                                   child: Text('Buy it' , style: TextStyle(fontFamily: 'pacifico' , fontSize: 25),)),
@@ -75,8 +84,9 @@ class RegisterPage extends StatelessWidget{
                         height: height*0.02,
                       ),
                       defaultTextField(
+                        textAlign: TextAlign.end,
                           function: arNameController ,
-                          validatorText: 'Enter Your ArabicName',
+                          validatorText: 'الاسم عربى',
                           hint: 'ArabicName',
                           type: TextInputType.name
                       ),
