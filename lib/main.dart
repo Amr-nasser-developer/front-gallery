@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => GalleryCubit()
             ..getCustomer()
             ..listProduct()
-            ..listUser(),
+            ..listUser()
+          ..listDepartment()
         )
       ],
       child: MaterialApp(

@@ -1,19 +1,15 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gallary/layout/cubit/state.dart';
 import 'package:gallary/model/creat_customer_model.dart';
 import 'package:gallary/model/login_model.dart';
-import 'package:gallary/model/register_model.dart';
 import 'package:gallary/shared/network/remote/dio_helper.dart';
 
 class GalleryCubit extends Cubit<GalleryStates> {
   GalleryCubit() : super(GalleryIntial());
-
-  RegisterModel? registerModel;
   static GalleryCubit get(context) => BlocProvider.of(context);
+  String? message = '';
   postApi({enName, arName, email, password, passwordConfirmation, }) {
     emit(GalleryRegisterLoading());
     DioHelper.postData(url: 'register', data: {
@@ -21,18 +17,17 @@ class GalleryCubit extends Cubit<GalleryStates> {
         'en': enName,
         'ar': arName
       },
+      'role' : 'admin',
       'email': '$email',
       'password': '$password',
       'password_confirmation': '$passwordConfirmation',
-      // 'role': '$role',
-      'department_id': '2'
+      'department_id': '5',
     }).then((value) {
-      registerModel = RegisterModel.fromJson(value.data);
       print(value);
       emit(GalleryRegisterSuccess());
     }).catchError((e) {
       print(e.toString());
-      emit(GalleryRegisterError(e));
+      emit(GalleryRegisterError(e.toString()));
     });
   }
 
@@ -256,7 +251,6 @@ class GalleryCubit extends Cubit<GalleryStates> {
       emit(GalleryListUserError(e.toString()));
     });
   }
-  List< dynamic> passwordError = [];
   updateUser({enName, arName, email, password, passwordConfirmation, role,id,departmentId}){
     emit(GalleryUpdateUserLoading());
     DioHelper.postData(
@@ -274,8 +268,6 @@ class GalleryCubit extends Cubit<GalleryStates> {
       },
       url: 'dashboard/v1/user/$id/update',
     ).then((value){
-      passwordError = value.data['errors'];
-      print(passwordError);
       emit(GalleryUpdateUserSuccess());
     }).catchError((e){
       print(e.toString());
@@ -298,6 +290,104 @@ class GalleryCubit extends Cubit<GalleryStates> {
     });
   }
 
+  List<dynamic> viewDepartment = [];
+  listDepartment(){
+    emit(GalleryListDepartmentLoading());
+    DioHelper.getData(
+      url: 'dashboard/v1/departments',
+    ).then((value){
+      viewDepartment = value.data['data']['data'];
+      print(viewDepartment);
+      emit(GalleryListDepartmentSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListDepartmentError(e.toString()));
+    });
+  }
 
+  deleteDepartment({id}){
+    emit(GalleryDeleteDepartmentLoading());
+    DioHelper.postData(
+      data: {
+        'id' : id
+      },
+      url: 'dashboard/v1/departments/$id/delete',
+    ).then((value){
+      emit(GalleryDeleteDepartmentSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryDeleteDepartmentError(e.toString()));
+    });
+  }
+
+  createDepartment({ar , en }){
+    emit(GalleryCreateDepartmentLoading());
+    DioHelper.postData(
+      data: {
+        'name' : {
+          'ar' : ar,
+          'en' : en,
+        },
+      },
+      url: 'dashboard/v1/departments',
+    ).then((value){
+      emit(GalleryCreateDepartmentSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryCreateDepartmentError(e.toString()));
+    });
+  }
+  updateDepartment({enName, arName,id}){
+    emit(GalleryUpdateDepartmentLoading());
+    DioHelper.postData(
+      data: {
+        'name' : {
+          'ar' : arName,
+          'en' : enName,
+        },
+      },
+      url: 'dashboard/v1/departments/$id/update',
+    ).then((value){
+      emit(GalleryUpdateDepartmentSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryUpdateDepartmentError(e.toString()));
+    });
+  }
+
+  List<dynamic> searchD = [];
+  var searchDepartmentController = TextEditingController();
+  searchDepartment(String search){
+    emit(GallerySearchDepartmentLoading());
+    DioHelper.getData(
+        url: 'dashboard/datatable/department?q=$search',
+        query: {
+          'q' : '$search'
+        }
+    ).then((value){
+      searchD = value.data['departments']['data'];
+      emit(GallerySearchDepartmentSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GallerySearchDepartmentError(e));
+    });
+  }
+  List<dynamic> searchC = [];
+  var searchCustomerController = TextEditingController();
+  searchCustomer(String search){
+    emit(GallerySearchCustomerLoading());
+    DioHelper.getData(
+        url: 'dashboard/datatable/customers?q=$search',
+        query: {
+          'q' : '$search'
+        }
+    ).then((value){
+      searchC = value.data['customers']['data'];
+      emit(GallerySearchCustomerSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GallerySearchCustomerError(e));
+    });
+  }
 
 }
