@@ -10,7 +10,6 @@ import 'package:gallary/shared/components.dart';
 
 class RegisterPage extends StatelessWidget{
   final GlobalKey<FormState> _globalKey = GlobalKey();
-
   final enNameController = TextEditingController();
   final arNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -18,33 +17,18 @@ class RegisterPage extends StatelessWidget{
   final passwordConfirmController = TextEditingController();
   final roleController = TextEditingController();
   final menuController = TextEditingController();
-
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (BuildContext context)=> GalleryCubit(),
       child: BlocConsumer<GalleryCubit, GalleryStates>(
-        listener: (context, state){
-          if(state is GalleryRegisterSuccess){
+        listener: (context, state) {
+          if (state is GalleryRegisterSuccess) {
             // print('success');
-            finishNavigate(context: context, widget: LoginPage(email: emailController.text,password: passwordController.text,));
-          }
-          if(state is GalleryRegisterLoading){
-            print('Loading');
-          }
-          if(state is GalleryRegisterError){
-            print(state.error);
-            Fluttertoast.showToast(
-                msg: 'This Email Already Use',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 3,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0
-            );
+            finishNavigate(context: context,
+                widget: LoginPage(email: emailController.text,
+                  password: passwordController.text,));
           }
         },
         builder: (context, state){
@@ -171,28 +155,42 @@ class RegisterPage extends StatelessWidget{
                       ConditionalBuilder(
                           condition: state is! GalleryRegisterLoading
                           , builder: (context)=> Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 80),
-                        child : FlatButton(
-                          color: Colors.black,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(120)
-                          ),
-                          onPressed: (){
-                            if(_globalKey.currentState!.validate()){
-                              GalleryCubit.get(context).postApi(
-                                arName: arNameController.text ,
-                                email: emailController.text,
-                                password: passwordController.text,
-                                enName: enNameController.text,
-                                passwordConfirmation: passwordConfirmController.text ,
-                              );
-                            }
-                          },
-                          child: Text('Register',style: TextStyle(color: Colors.white),),
-                        ),
-                      ),
+                                              padding: EdgeInsets.symmetric(horizontal: 80),
+                                              child : FlatButton(
+                                                color: Colors.black,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(120)
+                                                ),
+                                                onPressed: (){
+                                                  if (passwordController.text != passwordConfirmController.text) {
+                                                    Fluttertoast.showToast(
+                                                        msg: 'The password dosen\'t match' ,
+                                                        toastLength: Toast.LENGTH_SHORT,
+                                                        gravity: ToastGravity.BOTTOM,
+                                                        timeInSecForIosWeb: 3,
+                                                        backgroundColor: Colors.red,
+                                                        textColor: Colors.white,
+                                                        fontSize: 16.0
+                                                    );
+                                                  }
+                                                  if(_globalKey.currentState!.validate()){
+                                                    GalleryCubit.get(context).postApi(
+                                                      // role: roleController.text,
+                                                      arName: arNameController.text ,
+                                                      email: emailController.text,
+                                                      password: passwordController.text,
+                                                      enName: enNameController.text,
+                                                      passwordConfirmation: passwordConfirmController.text ,
+                                                    );
+
+                                                  }
+                                                },
+                                                child: Text('Register',style: TextStyle(color: Colors.white),),
+                                              ),
+                                            ),
                         fallback: (context)=> Center(child: CircularProgressIndicator(),),
                       ),
+
                     ],
                   ),
                 ),

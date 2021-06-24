@@ -16,10 +16,8 @@ Widget defaultTextField({String? validatorText , bool obscure = false, String? h
   IconData? iconData, TextInputType? type, TextEditingController? function, textAlign = TextAlign.start, })=> TextFormField(
 
   validator: (value) {
-    if(value!.isEmpty){
+    if(value!.isEmpty) {
       return validatorText;
-    }else if(p != c){
-      return 'The password does not match';
     }
     else{
       return null;

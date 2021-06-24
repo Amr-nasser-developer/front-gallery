@@ -1,4 +1,5 @@
 import 'package:gallary/model/login_model.dart';
+import 'package:gallary/model/register_model.dart';
 
 abstract class GalleryStates{}
 class GalleryIntial extends GalleryStates{}
@@ -93,6 +94,42 @@ class GalleryDeleteUserSuccess extends GalleryStates{}
 class GalleryDeleteUserError extends GalleryStates{
   final error;
   GalleryDeleteUserError(this.error);
+}
+class GalleryListDepartmentLoading extends GalleryStates{}
+class GalleryListDepartmentSuccess extends GalleryStates{}
+class GalleryListDepartmentError extends GalleryStates{
+  final error;
+  GalleryListDepartmentError(this.error);
+}
+class GalleryCreateDepartmentLoading extends GalleryStates{}
+class GalleryCreateDepartmentSuccess extends GalleryStates{}
+class GalleryCreateDepartmentError extends GalleryStates{
+  final error;
+  GalleryCreateDepartmentError(this.error);
+}
+class GalleryUpdateDepartmentLoading extends GalleryStates{}
+class GalleryUpdateDepartmentSuccess extends GalleryStates{}
+class GalleryUpdateDepartmentError extends GalleryStates{
+  final error;
+  GalleryUpdateDepartmentError(this.error);
+}
+class GalleryDeleteDepartmentLoading extends GalleryStates{}
+class GalleryDeleteDepartmentSuccess extends GalleryStates{}
+class GalleryDeleteDepartmentError extends GalleryStates{
+  final error;
+  GalleryDeleteDepartmentError(this.error);
+}
+class GallerySearchDepartmentLoading extends GalleryStates{}
+class GallerySearchDepartmentSuccess extends GalleryStates{}
+class GallerySearchDepartmentError extends GalleryStates{
+  final error;
+  GallerySearchDepartmentError(this.error);
+}
+class GallerySearchCustomerLoading extends GalleryStates{}
+class GallerySearchCustomerSuccess extends GalleryStates{}
+class GallerySearchCustomerError extends GalleryStates{
+  final error;
+  GallerySearchCustomerError(this.error);
 }
 
 class GalleryMenuBar extends GalleryStates{}
