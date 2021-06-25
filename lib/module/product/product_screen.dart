@@ -95,6 +95,7 @@ class ProductScreen extends StatelessWidget {
                       prefixIcon: Icon(Icons.search),
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Container(
@@ -112,6 +113,7 @@ class ProductScreen extends StatelessWidget {
                                 context,formKey,scaffoldKey),
                           ),
                         )
+
                     ),
                   ),
                   // ConditionalBuilder(
