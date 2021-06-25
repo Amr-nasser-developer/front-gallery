@@ -101,7 +101,7 @@ class ProductScreen extends StatelessWidget {
                     builder: (context) => buildProduct(GalleryCubit.get(context).viewProduct,
                         context,formKey,scaffoldKey),
                     fallback: (context) => Center(
-                      child: CircularProgressIndicator(color: Colors.black,),
+                      // child: CircularProgressIndicator(color: Colors.black,),
                     ),
                   ),
                 ],
