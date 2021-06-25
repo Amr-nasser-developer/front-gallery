@@ -84,11 +84,11 @@ class UserScreen extends StatelessWidget {
                       }
                       return null;
                     },
-                    controller: searchController,
+                    controller: GalleryCubit.get(context).searchUserController,
                     keyboardType: TextInputType.text,
                     onFieldSubmitted: (value) {},
                     onChanged: (value) {
-                      print(value);
+                      GalleryCubit.get(context).searchUser(value);
                     },
                     decoration: InputDecoration(
                       labelText: 'Search',
@@ -105,7 +105,7 @@ class UserScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10.0),
                         color: Colors.white),
                     child: ConditionalBuilder(
-                        condition: state is! GalleryListUserLoading ,
+                        condition: state is! GallerySearchUserSuccess ,
                         builder: (context)=> Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -170,7 +170,70 @@ class UserScreen extends StatelessWidget {
                                 GalleryCubit.get(context).viewUser.length),
                           ],
                         ),
-                      fallback: (context)=> Center(child: CircularProgressIndicator(),),
+                      fallback: (context)=> Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.only(start: 15.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                      'Id',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 24.0),
+                                    )),
+                                Expanded(
+                                    child: Text(
+                                      'Arabic Name',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 24.0),
+                                    )),
+                                Expanded(
+                                    child: Text(
+                                      'English Name',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 24.0),
+                                    )),
+                                Expanded(
+                                    child: Text(
+                                      'Email',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 24.0),
+                                    )),
+                                Expanded(
+                                    child: Text(
+                                      '             Delete    ',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 24.0),
+                                    )),
+                                Expanded(
+                                    child: Text(
+                                      '            Update       ',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 24.0),
+                                    )),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          ListView.separated(
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) => customerTable(
+                                GalleryCubit.get(context).searchY[index],
+                                context,
+                              ),
+                              separatorBuilder: (context, index) => Divider(
+                                height: 2,
+                              ),
+                              itemCount:
+                              GalleryCubit.get(context).searchY.length),
+                        ],
+                      ),
                     )
                   ),
                 ],
@@ -194,8 +257,8 @@ class UserScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(child: Text('${model['id']}')),
-            Expanded(child: Text('     ${model['name']['ar']}')),
-            Expanded(child: Text('     ${model['name']['en']}')),
+            Expanded(child: Text('     ${model['name']["'ar'"]}')),
+            Expanded(child: Text('     ${model['name']["'en'"]}')),
             Expanded(child: Text('${model['email']}')),
             Expanded(
                 child: IconButton(

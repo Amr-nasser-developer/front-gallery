@@ -186,8 +186,8 @@ class GalleryCubit extends Cubit<GalleryStates> {
     DioHelper.postData(
       data: {
         'name' : {
-          "'ar'" : ar,
-          "'en'" : en,
+          'ar' : ar,
+          'en' : en,
         },
         'cost' : cost,
         'availabilty': availabilty,
@@ -357,7 +357,7 @@ class GalleryCubit extends Cubit<GalleryStates> {
 
   List<dynamic> searchD = [];
   var searchDepartmentController = TextEditingController();
-  searchDepartment(String search){
+  searchDepartment( search){
     emit(GallerySearchDepartmentLoading());
     DioHelper.getData(
         url: 'dashboard/datatable/department?q=$search',
@@ -374,7 +374,7 @@ class GalleryCubit extends Cubit<GalleryStates> {
   }
   List<dynamic> searchC = [];
   var searchCustomerController = TextEditingController();
-  searchCustomer(String search){
+  searchCustomer(search){
     emit(GallerySearchCustomerLoading());
     DioHelper.getData(
         url: 'dashboard/datatable/customers?q=$search',
@@ -387,6 +387,40 @@ class GalleryCubit extends Cubit<GalleryStates> {
     }).catchError((e){
       print(e.toString());
       emit(GallerySearchCustomerError(e));
+    });
+  }
+  List<dynamic> searchY = [];
+  var searchUserController = TextEditingController();
+  searchUser(search){
+    emit(GallerySearchUserLoading());
+    DioHelper.getData(
+        url: 'dashboard/datatable/users?q=$search',
+        query: {
+          'q' : '$search'
+        }
+    ).then((value){
+      searchY = value.data['users']['data'];
+      emit(GallerySearchUserSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GallerySearchUserError(e));
+    });
+  }
+  List<dynamic> searchP = [];
+  var searchProductController = TextEditingController();
+  searchProduct(search){
+    emit(GallerySearchProductLoading());
+    DioHelper.getData(
+        url: 'dashboard/datatable/products?q=$search',
+        query: {
+          'q' : '$search'
+        }
+    ).then((value){
+      searchP = value.data['products']['data'];
+      emit(GallerySearchProductSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GallerySearchProductError(e));
     });
   }
 

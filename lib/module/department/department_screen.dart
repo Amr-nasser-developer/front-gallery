@@ -208,14 +208,14 @@ class DepartmentScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => departmentSearch(
                                 GalleryCubit.get(context)
-                                    .searchC[index],
+                                    .searchD[index],
                                 context,
                               ),
                               separatorBuilder: (context, index) => Divider(
                                 height: 2,
                               ),
                               itemCount: GalleryCubit.get(context)
-                                  .searchC
+                                  .searchD
                                   .length),
                         ],
                       ),
