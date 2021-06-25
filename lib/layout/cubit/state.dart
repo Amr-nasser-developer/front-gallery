@@ -131,6 +131,18 @@ class GallerySearchCustomerError extends GalleryStates{
   final error;
   GallerySearchCustomerError(this.error);
 }
+class GallerySearchUserLoading extends GalleryStates{}
+class GallerySearchUserSuccess extends GalleryStates{}
+class GallerySearchUserError extends GalleryStates{
+  final error;
+  GallerySearchUserError(this.error);
+}
+class GallerySearchProductLoading extends GalleryStates{}
+class GallerySearchProductSuccess extends GalleryStates{}
+class GallerySearchProductError extends GalleryStates{
+  final error;
+  GallerySearchProductError(this.error);
+}
 
 class GalleryMenuBar extends GalleryStates{}
 class AppChangeBottomSheetState extends GalleryStates{}
