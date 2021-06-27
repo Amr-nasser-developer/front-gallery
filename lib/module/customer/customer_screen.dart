@@ -74,6 +74,9 @@ class CustomerScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: TextFormField(
+                  style: TextStyle(
+                      color: Colors.white
+                  ),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'inputData';
@@ -113,39 +116,39 @@ class CustomerScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                     child: Text(
-                                      '  Id',
+                                      '    Id',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      'Arabic Name',
+                                      '   Arabic Name',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
                                       'English Name',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      ' phone',
+                                      '     phone',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      '              Delete       ',
+                                      '                               ',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      '            Update    ',
+                                      '                               ',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )
                                 ),
                               ],
@@ -177,39 +180,39 @@ class CustomerScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                     child: Text(
-                                      ' Id',
+                                      '    Id',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      'Arabic Name',
+                                      '   Arabic Name',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
                                       'English Name',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      ' phone',
+                                      '     phone',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      '              Delete       ',
+                                      '                               ',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      '            Update    ',
+                                      '                               ',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black, fontWeight: FontWeight.bold),
                                     )
                                 ),
                               ],
@@ -322,6 +325,7 @@ class CustomerScreen extends StatelessWidget {
       },
     );
   }
+
 
   Widget customerSearch(search, context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,

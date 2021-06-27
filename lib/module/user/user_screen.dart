@@ -78,6 +78,9 @@ class UserScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   TextFormField(
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'inputData';
@@ -119,37 +122,37 @@ class UserScreen extends StatelessWidget {
                                       child: Text(
                                         'Id',
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 24.0),
+                                            color: Colors.black,fontWeight: FontWeight.bold ),
                                       )),
                                   Expanded(
                                       child: Text(
                                         'Arabic Name',
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 24.0),
+                                            color: Colors.black,fontWeight: FontWeight.bold),
                                       )),
                                   Expanded(
                                       child: Text(
                                         'English Name',
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 24.0),
+                                            color: Colors.black,fontWeight: FontWeight.bold),
                                       )),
                                   Expanded(
                                       child: Text(
                                         'Email',
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 24.0),
+                                            color: Colors.black,fontWeight: FontWeight.bold),
                                       )),
                                   Expanded(
                                       child: Text(
-                                        '             Delete    ',
+                                        '                               ',
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 24.0),
+                                            color: Colors.black,fontWeight: FontWeight.bold),
                                       )),
                                   Expanded(
                                       child: Text(
-                                        '            Update       ',
+                                        '                               ',
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 24.0),
+                                            color: Colors.black,fontWeight: FontWeight.bold),
                                       )),
                                 ],
                               ),
@@ -183,37 +186,37 @@ class UserScreen extends StatelessWidget {
                                     child: Text(
                                       'Id',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black,fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
                                       'Arabic Name',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black,fontWeight: FontWeight.bold ),
                                     )),
                                 Expanded(
                                     child: Text(
                                       'English Name',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black,fontWeight: FontWeight.bold ),
                                     )),
                                 Expanded(
                                     child: Text(
                                       'Email',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black,fontWeight: FontWeight.bold),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      '             Delete    ',
+                                      '                               ',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black,fontWeight: FontWeight.bold ),
                                     )),
                                 Expanded(
                                     child: Text(
-                                      '            Update       ',
+                                      '                               ',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 24.0),
+                                          color: Colors.black,fontWeight: FontWeight.bold ),
                                     )),
                               ],
                             ),
@@ -257,8 +260,8 @@ class UserScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(child: Text('${model['id']}')),
-            Expanded(child: Text('     ${model['name']["'ar'"]}')),
-            Expanded(child: Text('     ${model['name']["'en'"]}')),
+            Expanded(child: Text('     ${model['name']['ar']}')),
+            Expanded(child: Text('     ${model['name']['en']}')),
             Expanded(child: Text('${model['email']}')),
             Expanded(
                 child: IconButton(

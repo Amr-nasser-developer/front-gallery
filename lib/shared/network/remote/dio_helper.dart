@@ -40,34 +40,4 @@ class DioHelper{
     return await dio!.post(url!, queryParameters: query, data: data);
   }
 
-  static Future<dynamic> uploadFile({
-    filePath,
-    String? token,
-    String? url,
-  }) async {
-    String token = await CashHelper.getData(key: 'token');
-    // var _userId = '605b981d4d998b3124a81204';
-
-    try {
-      FormData formData =
-      new FormData.fromMap({
-        "image":
-        await MultipartFile.fromFile(filePath, filename: "thumb")});
-
-      Response response =
-      await Dio().put(
-          'http://18.221.253.60:83/api/dashboard/v1/products',
-          data: formData,
-          options: Options(
-              headers: <String, String>{
-                'Authorization': 'Bearer $token',
-              }
-          )
-      );
-      return response;
-    }on DioError catch (e) {
-      return e.response;
-    } catch(e){
-    }
-  }
 }
