@@ -10,6 +10,7 @@ import 'package:gallary/shared/components.dart';
 
 
 class DepartmentScreen extends StatelessWidget {
+
   var searchController = TextEditingController();
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   GlobalKey<FormState> formKey = GlobalKey();
@@ -75,6 +76,9 @@ class DepartmentScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: TextFormField(
+                  style: TextStyle(
+                      color: Colors.white
+                  ),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'inputData';
@@ -114,34 +118,34 @@ class DepartmentScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                   child: Text(
-                                    '  Id',
+                                    '    Id',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
-                                  )),
+                                        color: Colors.black,fontWeight: FontWeight.bold),
+                                  )   ,flex: 1,),
                               Expanded(
                                   child: Text(
-                                    'Arabic Name',
+                                    '   Arabic Name',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
-                                  )),
+                                        color: Colors.black, fontWeight: FontWeight.bold),
+                                  )   ,flex: 1,),
                               Expanded(
                                   child: Text(
                                     'English Name',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
-                                  )),
+                                        color: Colors.black, fontWeight: FontWeight.bold),
+                                  )   ,flex: 1,),
                               Expanded(
                                   child: Text(
-                                    '                 Delete       ',
+                                    '                               ',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
-                                  )),
+                                        color: Colors.black, fontWeight: FontWeight.bold),
+                                  )   ,flex: 1,),
                               Expanded(
                                   child: Text(
-                                    '                Update    ',
+                                    '                               ',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
-                                  )),
+                                        color: Colors.black, fontWeight: FontWeight.bold),
+                                  )   ,flex: 1,),
                             ],
                           ),
                           SizedBox(
@@ -170,34 +174,34 @@ class DepartmentScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Expanded(
-                                  child: Text(
-                                    ' Id',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
-                                  )),
+                                child: Text(
+                                  '    Id',
+                                  style: TextStyle(
+                                      color: Colors.black,fontWeight: FontWeight.bold),
+                                )   ,flex: 1,),
                               Expanded(
-                                  child: Text(
-                                    'Arabic Name',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
-                                  )),
+                                child: Text(
+                                  '   Arabic Name',
+                                  style: TextStyle(
+                                      color: Colors.black, fontWeight: FontWeight.bold),
+                                )   ,flex: 1,),
                               Expanded(
                                   child: Text(
                                     'English Name',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
+                                        color: Colors.black,fontWeight: FontWeight.bold),
                                   )),
                               Expanded(
                                   child: Text(
-                                    '                 Delete       ',
+                                    '                               ',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
+                                        color: Colors.black, fontWeight: FontWeight.bold),
                                   )),
                               Expanded(
                                   child: Text(
-                                    '                Update    ',
+                                    '                               ',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 24.0),
+                                        color: Colors.black,fontWeight: FontWeight.bold),
                                   )),
                             ],
                           ),
@@ -222,7 +226,7 @@ class DepartmentScreen extends StatelessWidget {
                     ),
                   )
                 ),
-              )
+              ),
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -312,16 +316,22 @@ class DepartmentScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(child: Text('${search['id']}')),
-            Expanded(child: Text('      ${search['name']['ar']}')),
-            Expanded(child: Text('      ${search['name']['en']}')),
+            Expanded(
+                child: Text('${search['id']}'),
+              flex: 1,
+
+            ),
+            Expanded(child: Text('      ${search['name']['ar']}')
+              ,flex: 1,
+            ),
+            Expanded(child: Text('      ${search['name']['en']}')   ,flex: 1,),
             Expanded(
                 child: IconButton(
                     onPressed: () {
                       GalleryCubit.get(context)
                           .deleteDepartment(id: search['id']);
                     },
-                    icon: Icon(Icons.delete))),
+                    icon: Icon(Icons.delete))   ,flex: 1,),
             Expanded(
               child: CircleAvatar(
                 child: IconButton(
@@ -404,6 +414,7 @@ class DepartmentScreen extends StatelessWidget {
                     )),
                 radius: 16.0,
               ),
+              flex: 1,
             ),
           ],
         ),

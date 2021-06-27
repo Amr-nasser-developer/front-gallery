@@ -1,23 +1,32 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gallary/layout/cubit/state.dart';
 import 'package:gallary/model/creat_customer_model.dart';
 import 'package:gallary/model/login_model.dart';
 import 'package:gallary/shared/network/remote/dio_helper.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 class GalleryCubit extends Cubit<GalleryStates> {
   GalleryCubit() : super(GalleryIntial());
+
   static GalleryCubit get(context) => BlocProvider.of(context);
   String? message = '';
-  postApi({enName, arName, email, password, passwordConfirmation, }) {
+  postApi({enName, arName, email, password, passwordConfirmation,role }) {
     emit(GalleryRegisterLoading());
     DioHelper.postData(url: 'register', data: {
       'name': {
         'en': enName,
         'ar': arName
       },
-      'role' : 'admin',
+      'role' : '$role',
       'email': '$email',
       'password': '$password',
       'password_confirmation': '$passwordConfirmation',
@@ -423,5 +432,28 @@ class GalleryCubit extends Cubit<GalleryStates> {
       emit(GallerySearchProductError(e));
     });
   }
+
+  final List<String> items = <String>['Admin', 'User'];
+  String? selectedItem;
+  dropdownButton(string){
+    emit(GalleryMenuBar());
+    selectedItem = string;
+  }
+
+   List<String> available = <String>['Yes', 'No'];
+   String? selectedAvailable;
+  dropdownButtonAvailable(string){
+    selectedAvailable = string;
+    emit(GalleryMenuAvailableBar());
+  }
+
+  String? image;
+  Future getImage(ImageSource imageSource) async {
+    PickedFile? tempImage = await ImagePicker().getImage(source: imageSource);
+    if (tempImage == null) return null;
+      image = (tempImage.path);
+    emit(ImageLoadingState());
+  }
+
 
 }

@@ -40,11 +40,10 @@ dependencies:
   fluttertoast: ^8.0.7
   carousel_slider: ^3.0.0
   image_picker: ^0.8.0+3
-  mime: ^1.0.0
-  loading: ^1.0.2
-  http: ^0.13.3
   progress_dialog: ^1.2.4
-
+  path_provider: ^2.0.2
+  path: ^1.8.0
+  http: ^0.13.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

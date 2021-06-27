@@ -145,8 +145,13 @@ class GallerySearchProductError extends GalleryStates{
 }
 
 class GalleryMenuBar extends GalleryStates{}
+class GalleryMenuAvailableBar extends GalleryStates{}
 class AppChangeBottomSheetState extends GalleryStates{}
 class AppChangeBottomSheetStatee extends GalleryStates{}
 class AppChangeBottomSheetStateee extends GalleryStates{}
 class ImageLoadingState extends GalleryStates{}
+class ImageLoadingErrorState extends GalleryStates{}
+
+
+
 
