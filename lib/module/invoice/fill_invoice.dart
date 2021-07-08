@@ -29,7 +29,9 @@ class _FillInvoiceState extends State<FillInvoice> {
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0);
+          GalleryCubit.get(context).listTask(CreateCustomerSuccess: true);
         }
+
       },
       builder: (context, state) {
         return Scaffold(
@@ -275,6 +277,7 @@ class _FillInvoiceState extends State<FillInvoice> {
                             );
                             Navigator.pop(context);
                             GalleryCubit.get(context).listFillInVoice(inVoiceId: fillInvoiceId);
+                            GalleryCubit.get(context).listTask(CreateCustomerSuccess: true);
                           },
                           child: Text(
                             'Confirm',

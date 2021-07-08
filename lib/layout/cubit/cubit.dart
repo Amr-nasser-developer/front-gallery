@@ -656,6 +656,7 @@ class GalleryCubit extends Cubit<GalleryStates> {
 
 
   List<dynamic>FillInvoice = [];
+  var invoiceId ;
   listFillInVoice({inVoiceId}){
     emit(GalleryListFillInVoiceLoading());
     DioHelper.getData(

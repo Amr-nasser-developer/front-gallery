@@ -317,6 +317,7 @@ class _InVoiceScreen extends State<InVoiceScreen> {
                         product_id: _mySelectionProduct,
                       );
                       Navigator.pop(context);
+                      descriptionController.clear();
                     }
                   },
                   context: context);
