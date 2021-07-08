@@ -31,7 +31,6 @@ dependencies:
   bloc: ^7.0.0
   flutter_bloc: ^7.0.0
   dio: ^4.0.0
-  conditional_builder: ^1.0.2
   hexcolor: ^2.0.3
   shared_preferences: ^2.0.6
   webview_flutter: ^2.0.8
@@ -41,9 +40,11 @@ dependencies:
   carousel_slider: ^3.0.0
   image_picker: ^0.8.0+3
   progress_dialog: ^1.2.4
-  path_provider: ^2.0.2
   path: ^1.8.0
-  http: ^0.13.3
+  flutter_barcode_scanner: ^2.0.0
+  flutter_conditional_rendering: ^2.0.0
+  textfield_search: ^0.8.0
+  dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter

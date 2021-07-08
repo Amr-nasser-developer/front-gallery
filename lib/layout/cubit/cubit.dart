@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +8,8 @@ import 'package:gallary/layout/cubit/state.dart';
 import 'package:gallary/model/creat_customer_model.dart';
 import 'package:gallary/model/login_model.dart';
 import 'package:gallary/shared/network/remote/dio_helper.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 
 class GalleryCubit extends Cubit<GalleryStates> {
@@ -19,26 +17,7 @@ class GalleryCubit extends Cubit<GalleryStates> {
 
   static GalleryCubit get(context) => BlocProvider.of(context);
   String? message = '';
-  postApi({enName, arName, email, password, passwordConfirmation,role }) {
-    emit(GalleryRegisterLoading());
-    DioHelper.postData(url: 'register', data: {
-      'name': {
-        'en': enName,
-        'ar': arName
-      },
-      'role' : '$role',
-      'email': '$email',
-      'password': '$password',
-      'password_confirmation': '$passwordConfirmation',
-      'department_id': '5',
-    }).then((value) {
-      print(value);
-      emit(GalleryRegisterSuccess());
-    }).catchError((e) {
-      print(e.toString());
-      emit(GalleryRegisterError(e.toString()));
-    });
-  }
+
 
   LoginModel? loginModel;
   postLogin({email , password}) {
@@ -56,7 +35,6 @@ class GalleryCubit extends Cubit<GalleryStates> {
     });
   }
 
-  CreateCustomer? _createCustomer;
   void createCustomer({enName, arName, phone}){
     emit(GalleryCreateCustomerSuccess());
     DioHelper.postData(
@@ -69,25 +47,49 @@ class GalleryCubit extends Cubit<GalleryStates> {
           'phone' : phone,
         },
     ).then((value){
-      _createCustomer = CreateCustomer.fromJson(value.data);
-      print(_createCustomer);
       emit(GalleryCreateCustomerSuccess());
     }).catchError((e){
       print(e.toString());
     });
   }
-
+  int currentPageCustomer = 1;
+  int totalPageCustomer = 0;
   List<dynamic> customer = [];
-   getCustomer(){
+  getCustomer({bool CreateCustomerSuccess = false}){
+    if(CreateCustomerSuccess == true){
+      currentPageCustomer = 1;
+    }
      emit(GalleryGetCustomerLoading());
     DioHelper.getData(
         url: 'dashboard/v1/customers',
+      query: {
+          'page' : currentPageCustomer,
+        'limit' : 100
+      }
     ).then((value){
-      customer = value.data['customers']['data'];
       emit(GalleryGetCustomerSuccess());
+      customer = value.data['customers']['data'];
+      currentPageCustomer++;
+      totalPageCustomer = value.data['customers']['last_page'];
     }).catchError((e){
       print(e.toString());
       emit(GalleryGetCustomerError(e.toString()));
+    });
+  }
+  listCustomerMore(){
+    emit(GalleryListCustomerMoreLoading());
+    DioHelper.getData(
+      query: {
+        'page' : currentPageCustomer
+      },
+      url: 'dashboard/v1/customers',
+    ).then((value){
+      emit(GalleryListCustomerMoreSuccess());
+      customer.addAll(value.data['customers']['data']);
+      currentPageCustomer+=1;
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListCustomerMoreError(e.toString()));
     });
   }
 
@@ -123,6 +125,48 @@ class GalleryCubit extends Cubit<GalleryStates> {
     }).catchError((e){
       print(e.toString());
       emit(GalleryUpdateCustomerError(e.toString().characters.string));
+    });
+  }
+
+
+  int currentPageTask = 1;
+  int totalPageTask = 0;
+  List<dynamic> task = [];
+  listTask({bool CreateCustomerSuccess = false}){
+    if(CreateCustomerSuccess == true){
+      currentPageTask = 1;
+    }
+    emit(GalleryListTaskLoading());
+    DioHelper.getData(
+        url: 'dashboard/v1/tasks',
+        query: {
+          'page' : currentPageTask,
+          'limit' : 100
+        }
+    ).then((value){
+      emit(GalleryListTaskSuccess());
+      task = value.data['tasks']['data'];
+      currentPageTask++;
+      totalPageTask = value.data['tasks']['last_page'];
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListTaskError(e.toString()));
+    });
+  }
+  listTaskMore(){
+    emit(GalleryListTaskMoreLoading());
+    DioHelper.getData(
+      query: {
+        'page' : currentPageTask
+      },
+      url: 'dashboard/v1/tasks',
+    ).then((value){
+      emit(GalleryListTaskMoreSuccess());
+      task.addAll(value.data['tasks']['data']);
+      currentPageTask+=1;
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListTaskMoreError(e.toString()));
     });
   }
 
@@ -163,7 +207,6 @@ class GalleryCubit extends Cubit<GalleryStates> {
     fabIconn = icon!;
     emit(AppChangeBottomSheetStatee());
   }
-
   bool isBottomSheetShownnn = false;
   IconData fabIconnn = Icons.edit;
 
@@ -176,21 +219,48 @@ class GalleryCubit extends Cubit<GalleryStates> {
     emit(AppChangeBottomSheetStateee());
   }
 
+
+  int currentPageProduct = 1;
+  int totalPageProduct = 0;
   List<dynamic> viewProduct = [];
-  listProduct(){
-    emit(GalleryListProductLoading());
+  listProduct({bool CreateProductSuccess = false}){
+  if(CreateProductSuccess == true){
+  currentPageProduct = 1;
+  }
+     emit(GalleryListProductLoading());
     DioHelper.getData(
+      query: {
+        'page' : currentPageProduct,
+        'limit' : 100
+      },
       url: 'dashboard/v1/products',
     ).then((value){
-      viewProduct = value.data['product']['data'];
-      print(viewProduct);
-      emit(GalleryListProductSuccess());
+        emit(GalleryListProductSuccess());
+        viewProduct = value.data['product']['data'];
+        currentPageProduct++;
+        totalPageProduct = value.data['product']['last_page'];
     }).catchError((e){
       print(e.toString());
       emit(GalleryListProductError(e.toString()));
     });
   }
-  createProduct({ar , en , cost, availabilty, thumb }){
+  listProductMore(){
+    emit(GalleryListProductMoreLoading());
+    DioHelper.getData(
+      query: {
+        'page' : currentPageProduct
+      },
+      url: 'dashboard/v1/products',
+    ).then((value){
+      emit(GalleryListProductMoreSuccess());
+      viewProduct.addAll(value.data['product']['data']);
+      currentPageProduct ++;
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListProductMoreError(e.toString()));
+    });
+  }
+   createProduct({ar , en , cost, availabilty, thumb }){
     emit(GalleryCreateProductLoading());
     DioHelper.postData(
       data: {
@@ -215,8 +285,8 @@ class GalleryCubit extends Cubit<GalleryStates> {
     DioHelper.postData(
       data: {
         'name' : {
-          "'ar'" : ar,
-          "'en'" : en,
+          'ar' : ar,
+          'en' : en,
         },
         'cost' : cost,
         'availabilty': availabilty,
@@ -244,20 +314,66 @@ class GalleryCubit extends Cubit<GalleryStates> {
       emit(GalleryDeleteProductError(e.toString()));
     });
   }
- String id = '';
+  String id = '';
+  int currentPageUser = 1;
+  int totalPageUser = 0;
   List<dynamic> viewUser = [];
-  listUser(){
+  listUser({bool CreateUserSuccess = false}){
+    if(CreateUserSuccess == true){
+      currentPageUser = 1;
+    }
     emit(GalleryListUserLoading());
     DioHelper.getData(
+      query: {
+        'page' : currentPageUser,
+        'limit' : 100
+      },
       url: 'dashboard/v1/user',
     ).then((value){
       viewUser = value.data['users']['data'];
-      id = value.data['users']['data']['id'];
-      print(viewUser);
+      currentPageUser++;
+      totalPageUser =  value.data['users']['last_page'];
       emit(GalleryListUserSuccess());
     }).catchError((e){
       print(e.toString());
       emit(GalleryListUserError(e.toString()));
+    });
+  }
+  listUserMore(){
+    emit(GalleryListUserMoreLoading());
+    DioHelper.getData(
+      query: {
+        'page' : currentPageUser
+      },
+      url: 'dashboard/v1/user',
+    ).then((value){
+      viewUser.addAll(value.data['users']['data']);
+      currentPageUser++;
+      emit(GalleryListUserMoreSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListUserMoreError(e.toString()));
+    });
+  }
+  postApi({enName, arName, email, password, passwordConfirmation, role, avatar, department_id}) {
+    emit(GalleryRegisterLoading());
+    DioHelper.postData(url: 'dashboard/v1/user', data: {
+      'name': {
+        'en': enName,
+        'ar': arName
+      },
+      'role' : '$role',
+      'email': '$email',
+      'password': '$password',
+      'password_confirmation': '$passwordConfirmation',
+      'department_id': department_id,
+      'avatar' : avatar
+    }).then((value) {
+      print(value);
+      emit(GalleryRegisterSuccess());
+    }).catchError((e) {
+      print(e.toString());
+      emit(GalleryRegisterError(e.toString()));
     });
   }
   updateUser({enName, arName, email, password, passwordConfirmation, role,id,departmentId}){
@@ -267,9 +383,8 @@ class GalleryCubit extends Cubit<GalleryStates> {
         'name': {
           'en': enName,
           'ar': arName,
-
         },
-        'department_id' : departmentId,
+        'department_id' : 5,
         'email': email,
         'password': password,
         'password_confirmation': passwordConfirmation,
@@ -283,7 +398,6 @@ class GalleryCubit extends Cubit<GalleryStates> {
       emit(GalleryUpdateUserError(e.toString().characters.string));
     });
   }
-
   deleteUser({id}){
     emit(GalleryDeleteUserLoading());
     DioHelper.postData(
@@ -299,18 +413,44 @@ class GalleryCubit extends Cubit<GalleryStates> {
     });
   }
 
+  int currentPageDepartment = 1;
+  int totalPageDepartment = 0;
   List<dynamic> viewDepartment = [];
-  listDepartment(){
+  listDepartment({bool CreateDepartmentSuccess = false}){
+    if(CreateDepartmentSuccess == true){
+      currentPageDepartment = 1;
+    }
     emit(GalleryListDepartmentLoading());
     DioHelper.getData(
+      query: {
+        'page' : currentPageDepartment,
+        'limit' : 100
+      },
       url: 'dashboard/v1/departments',
     ).then((value){
       viewDepartment = value.data['data']['data'];
-      print(viewDepartment);
+      currentPageDepartment++;
+      totalPageDepartment = value.data['data']['last_page'];
       emit(GalleryListDepartmentSuccess());
     }).catchError((e){
       print(e.toString());
       emit(GalleryListDepartmentError(e.toString()));
+    });
+  }
+  listDepartmentMore(){
+    emit(GalleryListDepartmentMoreLoading());
+    DioHelper.getData(
+      query: {
+        'page' : currentPageDepartment
+      },
+      url: 'dashboard/v1/departments',
+    ).then((value){
+      viewDepartment.addAll(value.data['data']['data']);
+      currentPageDepartment++;
+      emit(GalleryListDepartmentMoreSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListDepartmentMoreError(e.toString()));
     });
   }
 
@@ -328,7 +468,6 @@ class GalleryCubit extends Cubit<GalleryStates> {
       emit(GalleryDeleteDepartmentError(e.toString()));
     });
   }
-
   createDepartment({ar , en }){
     emit(GalleryCreateDepartmentLoading());
     DioHelper.postData(
@@ -361,6 +500,264 @@ class GalleryCubit extends Cubit<GalleryStates> {
     }).catchError((e){
       print(e.toString());
       emit(GalleryUpdateDepartmentError(e.toString()));
+    });
+  }
+
+  List<dynamic> viewType = [];
+  var viewTypeName ;
+  listType(){
+    emit(GalleryListTypeLoading());
+    DioHelper.getData(
+      url: 'dashboard/v1/types',
+      query: {
+        'limit' : 100
+      }
+    ).then((value){
+      viewType = value.data['types']['data'];
+      print(viewType);
+      emit(GalleryListTypeSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListTypeError(e.toString()));
+    });
+  }
+  deleteType({id}){
+    emit(GalleryDeleteTypeLoading());
+    DioHelper.postData(
+      data: {
+        'id' : id
+      },
+      url: 'dashboard/v1/types/$id/delete',
+    ).then((value){
+      emit(GalleryDeleteTypeSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryDeleteTypeError(e.toString()));
+    });
+  }
+  createType({ar , en }){
+    emit(GalleryCreateTypeLoading());
+    DioHelper.postData(
+      data: {
+        'name' : {
+          'ar' : ar,
+          'en' : en,
+        },
+      },
+      url: 'dashboard/v1/types',
+    ).then((value){
+      emit(GalleryCreateTypeSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryCreateTypeError(e.toString()));
+    });
+  }
+  updateType({enName, arName,id}){
+    emit(GalleryUpdateTypeLoading());
+    DioHelper.postData(
+      data: {
+        'name' : {
+          'ar' : arName,
+          'en' : enName,
+        },
+      },
+      url: 'dashboard/v1/types/$id/update',
+    ).then((value){
+      emit(GalleryUpdateTypeSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryUpdateTypeError(e.toString()));
+    });
+  }
+
+  List<dynamic> viewInVoice = [];
+  int currentPageInvoice = 1;
+  int currentTotalPageInvoice = 1;
+  listInVoice({bool CreateInvoiceSuccess = false}){
+    if(CreateInvoiceSuccess == true){
+      currentPageInvoice = 1;
+    }
+    emit(GalleryListInVoiceLoading());
+    DioHelper.getData(
+      url: 'dashboard/v1/invoices',
+      query: {
+        'page' : currentPageInvoice,
+        'limit' : 100
+      }
+    ).then((value){
+      viewInVoice = value.data['invoices']['data'];
+      currentTotalPageInvoice = value.data['invoices']['last_page'];
+      currentPageInvoice++;
+      print(viewInVoice);
+      emit(GalleryListInVoiceSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListInVoiceError(e.toString()));
+    });
+  }
+  listInvoiceMore(){
+    emit(GalleryListInVoiceMoreLoading());
+    DioHelper.getData(
+      query: {
+        'page' : currentPageInvoice
+      },
+      url: 'dashboard/v1/invoices',
+    ).then((value){
+      viewInVoice.addAll(value.data['invoices']['data']);
+      currentPageInvoice++;
+      emit(GalleryListInVoiceMoreSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListInVoiceMoreError(e.toString()));
+    });
+  }
+  createInVoice({customer_id , item, size, width, high, type_id}){
+    emit(GalleryCreateInVoiceLoading());
+    DioHelper.postData(
+      data: {
+       'customer_id' : customer_id,
+        'item' :item,
+        'size' : size,
+        'dimentions' : {
+          'dimentions[0]' : width,
+          'dimentions[1]' : high,
+        },
+         // 'dimentions[0]' : width,
+         // 'dimentions[1]' : high,
+        'type_id' : type_id,
+      },
+      url: 'dashboard/v1/invoices',
+    ).then((value){
+      emit(GalleryCreateInVoiceSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryCreateInVoiceError(e.toString()));
+    });
+  }
+  updateInVoice({customer_id , item, size, width, high, type_id,id}){
+    emit(GalleryUpdateInVoiceLoading());
+    DioHelper.postData(
+      data: {
+        'customer_id' : customer_id,
+        'item' :item,
+        'size' : size,
+        'dimentions[0]' : width,
+        'dimentions[1]' : high,
+        'type_id' : type_id,
+      },
+      url: 'dashboard/v1/invoices/$id/update',
+    ).then((value){
+      emit(GalleryUpdateInVoiceSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryUpdateInVoiceError(e.toString()));
+    });
+  }
+
+
+  List<dynamic>FillInvoice = [];
+  var invoiceId ;
+  listFillInVoice({inVoiceId}){
+    emit(GalleryListFillInVoiceLoading());
+    DioHelper.getData(
+      url: 'dashboard/v1/invoice/details/$inVoiceId',
+    ).then((value){
+      FillInvoice = value.data['invoice_details']['data'];
+      print(FillInvoice);
+      emit(GalleryListFillInVoiceSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListFillInVoiceError(e.toString()));
+    });
+  }
+  postFillInVoice({invoice , department_id}){
+    emit(GalleryPostFillInVoiceLoading());
+    DioHelper.postData(
+      data: {
+        'department_id' :department_id,
+      },
+      url: 'dashboard/v1/tasks/send/$invoice',
+    ).then((value){
+      emit(GalleryPostFillInVoiceSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryPostFillInVoiceError(e.toString()));
+    });
+  }
+
+  createFillInVoice({product_id , description, inVoiceId}){
+    emit(GalleryCreateFillInVoiceLoading());
+    DioHelper.postData(
+      data: {
+        'product_id' : product_id,
+        'description' :description,
+      },
+      url: 'dashboard/v1/invoice/new/details/$inVoiceId',
+    ).then((value){
+      emit(GalleryCreateFillInVoiceSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryCreateFillInVoiceError(e.toString()));
+    });
+  }
+
+
+  List<dynamic> viewCalculation = [];
+  listCalculation (){
+    emit(GalleryListCalculationLoading());
+    DioHelper.getData(
+      url: 'dashboard/v1/calculation',
+    ).then((value){
+      viewCalculation = value.data['calculation']['data'];
+      print(viewCalculation);
+      emit(GalleryListCalculationSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryListCalculationError(e.toString()));
+    });
+  }
+  createCalculation({cut, type_id}){
+    emit(GalleryCreateCalculationLoading());
+    DioHelper.postData(
+      data: {
+        'cut' : cut,
+        'type_id' : type_id,
+      },
+      url: 'dashboard/v1/calculation',
+    ).then((value){
+      emit(GalleryCreateCalculationSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryCreateCalculationError(e.toString()));
+    });
+  }
+  updateCalculation({cut, type_id, id}){
+    emit(GalleryUpdateCalculationLoading());
+    DioHelper.postData(
+      data: {
+        'cut' : cut,
+        'type_id' : type_id,
+      },
+      url: 'dashboard/v1/calculation/$id/update',
+    ).then((value){
+      emit(GalleryUpdateCalculationSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryUpdateCalculationError(e.toString()));
+    });
+  }
+  deleteCalculation({id}){
+    emit(GalleryDeleteCalculationLoading());
+    DioHelper.postData(
+      data: {
+        'id' : id
+      },
+      url: 'dashboard/v1/calculation/$id/delete',
+    ).then((value){
+      emit(GalleryDeleteCalculationSuccess());
+    }).catchError((e){
+      print(e.toString());
+      emit(GalleryDeleteCalculationError(e.toString()));
     });
   }
 
@@ -436,9 +833,12 @@ class GalleryCubit extends Cubit<GalleryStates> {
   final List<String> items = <String>['Admin', 'User'];
   String? selectedItem;
   dropdownButton(string){
-    emit(GalleryMenuBar());
     selectedItem = string;
+    emit(GalleryMenuBar());
   }
+  final List<String> itemsInvoice = <String>['original', 'custom'];
+  String? selectedItemInvoice;
+
 
    List<String> available = <String>['Yes', 'No'];
    String? selectedAvailable;
@@ -447,13 +847,45 @@ class GalleryCubit extends Cubit<GalleryStates> {
     emit(GalleryMenuAvailableBar());
   }
 
-  String? image;
-  Future getImage(ImageSource imageSource) async {
-    PickedFile? tempImage = await ImagePicker().getImage(source: imageSource);
-    if (tempImage == null) return null;
-      image = (tempImage.path);
-    emit(ImageLoadingState());
+  // var responses;
+  var image;
+  PickedFile? tempImage;
+  getImage() async {
+    tempImage = await ImagePicker().getImage(source: ImageSource.gallery);
+      if (tempImage == null) return null;
+      image = File(tempImage!.path);
+      print(image);
+      uploadFile(image);
+      emit(ImageLoadingState());
+   }
+  var imageName ;
+  Future uploadFile(File file) async {
+    String name = file.path.split('/').last;
+    print(name);
+    var data = FormData.fromMap({"thumb": await MultipartFile.fromFile(
+      file.path,
+      filename: name,
+    )});
+    emit(GalleryUploadImageLoading());
+    Dio dio = new Dio(
+        BaseOptions(
+            headers:{
+              'Accept':'application/json',
+              // 'Content-Type':'multipart/form-data'
+            }
+        )
+    );
+    await dio
+        .post("http://18.221.253.60:83/api/imageUpload", data: data)
+        .then((response) {
+          emit(GalleryUploadImageSuccess());
+          imageName = response.data['image']['image_name'];
+          print('imageName : ${imageName}');
+      print(response);
+    }).catchError((error){
+      emit(GalleryUploadImageError(error));
+      print(error);
+    });
   }
-
-
+  String? mySelection;
 }

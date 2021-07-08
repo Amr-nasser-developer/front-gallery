@@ -2,13 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gallary/autofill.dart';
 import 'package:gallary/layout/cubit/cubit.dart';
 import 'package:gallary/layout/home.dart';
 import 'package:gallary/module/login/login_screen.dart';
 import 'package:gallary/shared/network/local/cash.dart';
 import 'package:gallary/shared/network/obServerCubit.dart';
 import 'package:gallary/shared/network/remote/dio_helper.dart';
-import 'package:gallary/table.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 void main() async {
@@ -17,7 +17,9 @@ void main() async {
   DioHelper.init();
   await CashHelper.init();
   String token = await CashHelper.getData(key: 'token');
-  print(token);
+  String role = await CashHelper.getData(key: 'role');
+  print('role : ${role}');
+  print('token : ${token}');
   runApp(MyApp(token));
 }
 
@@ -33,7 +35,11 @@ class MyApp extends StatelessWidget {
             ..getCustomer()
             ..listProduct()
             ..listUser()
-          ..listDepartment()
+            ..listDepartment()
+            ..listType()
+            ..listCalculation()
+            ..listInVoice()
+              ..listTask()
         )
       ],
       child: MaterialApp(
@@ -47,7 +53,7 @@ class MyApp extends StatelessWidget {
               statusBarColor: Colors.white,
               statusBarIconBrightness: Brightness.dark,
             ),
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.indigo.shade900,
             elevation: 0.0,
             titleTextStyle: TextStyle(
               color: Colors.black,
@@ -66,7 +72,7 @@ class MyApp extends StatelessWidget {
             selectedItemColor: Colors.black,
             unselectedItemColor: Colors.grey,
             elevation: 20.0,
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.indigo.shade900,
           ),
           textTheme: TextTheme(
             bodyText1: TextStyle(
@@ -115,7 +121,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         themeMode: ThemeMode.light,
-        title: 'Sallah',
+        title: 'Gallery',
         home: (token != null) ? HomePage() : LoginPage(),
       ),
     );

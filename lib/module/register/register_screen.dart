@@ -1,7 +1,7 @@
-import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallary/layout/cubit/cubit.dart';
 import 'package:gallary/layout/cubit/state.dart';
@@ -133,9 +133,10 @@ class RegisterPage extends StatelessWidget {
                       SizedBox(
                         height: height*0.05,
                       ),
-                      ConditionalBuilder(
-                        condition: state is! GalleryRegisterLoading,
-                        builder: (context) => Padding(
+                      Conditional.single(
+                        context: context,
+                        conditionBuilder: (context)=> state is! GalleryRegisterLoading,
+                        widgetBuilder: (context) => Padding(
                           padding: EdgeInsets.symmetric(horizontal: 80),
                           child: FlatButton(
                             color: Colors.black,
@@ -172,7 +173,7 @@ class RegisterPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        fallback: (context) => Center(
+                        fallbackBuilder: (context) => Center(
                           child: CircularProgressIndicator(),
                         ),
                       ),

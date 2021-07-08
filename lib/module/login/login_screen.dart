@@ -1,22 +1,21 @@
-import 'dart:math';
-
-import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallary/layout/cubit/cubit.dart';
 import 'package:gallary/layout/cubit/state.dart';
 import 'package:gallary/layout/home.dart';
-import 'package:gallary/module/register/register_screen.dart';
+import 'package:gallary/model/login_model.dart';
 import 'package:gallary/shared/components.dart';
 import 'package:gallary/shared/network/local/cash.dart';
-import 'admin_login_screen.dart';
 
 
 class LoginPage extends StatelessWidget{
   final String? email;
   final String? password;
   LoginPage({this.email, this.password});
+  Role? role;
+  int index = 0;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -34,8 +33,13 @@ class LoginPage extends StatelessWidget{
       child: BlocConsumer<GalleryCubit, GalleryStates>(
           listener: (context, state){
             if(state is GalleryLoginSuccess){
-              CashHelper.setData(key: 'token', value: GalleryCubit.get(context).loginModel!.data!.token);
-              finishNavigate(context: context,widget: HomePage());
+              CashHelper.setData(key: 'token', value: GalleryCubit.get(context).loginModel!.data!.token).then((value){
+                finishNavigate(context: context,widget: HomePage());
+              });
+              CashHelper.setData(key: 'role', value: GalleryCubit.get(context).loginModel!.data!.user!.roles.elementAt(index).nameRole).then((value){
+                print('role : ${value}');
+              });
+
             }
             if(state is GalleryLoginError){
               Fluttertoast.showToast(
@@ -54,7 +58,7 @@ class LoginPage extends StatelessWidget{
                 backgroundColor: Colors.indigo.shade900,
                 appBar: AppBar(
                   title: Text(
-                    'Login User',
+                    'Login',
                     style: TextStyle(
                         fontSize: 24.0, fontWeight: FontWeight.bold ,color: Colors.white),
                   ),
@@ -156,9 +160,10 @@ class LoginPage extends StatelessWidget{
                           height: height*0.05,
                         ),
 
-                        ConditionalBuilder(
-                          condition: state is! GalleryLoginLoading
-                          , builder: (context)=> Padding(
+                        Conditional.single(
+                          context: context,
+                          conditionBuilder: (context)=> state is! GalleryLoginLoading
+                          , widgetBuilder: (context)=> Padding(
                           padding: EdgeInsets.symmetric(horizontal: 80),
                           child : FlatButton(
                             color: Colors.black,
@@ -176,37 +181,12 @@ class LoginPage extends StatelessWidget{
                             child: Text('Login',style: TextStyle(color: Colors.white),),
                           ),
                         ),
-                          fallback: (context)=> Center(child: CircularProgressIndicator(),),
+                          fallbackBuilder: (context)=> Center(child: CircularProgressIndicator(),),
                         ),
 
                         SizedBox(
                           height: height*0.05,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text('Dont have an acount ?',style: TextStyle(color: Colors.white,fontSize: 16),),
-                            GestureDetector(
-                              child: FlatButton(child: Text('Signup',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                                onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterPage()));},
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: height*0.05,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                                onTap: (){defaultNavigate(context: context, widget: AdminLoginPage());},
-                                child: Text('are you Admin',style: TextStyle(color: Colors.white),
-
-                                )),
-                            Text('are you User',style: TextStyle(color: Colors.indigo.shade900),)
-                          ],
-                        )
                       ],
                     ),
                   ),

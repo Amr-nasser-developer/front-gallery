@@ -1,8 +1,8 @@
-class CreateCustomer{
-  bool? success;
-  String? message;
-  CreateCustomer.fromJson(Map<String, dynamic>json){
-    success = json['success'];
-    message = json['message'];
+class ImageUpload{
+  String? image_url;
+  String? image_name;
+  ImageUpload.fromJson(Map<String, dynamic>json){
+    image_url = json['image_url'];
+    image_name = json['image_name'];
   }
 }
