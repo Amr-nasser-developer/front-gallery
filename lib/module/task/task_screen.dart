@@ -118,9 +118,7 @@ class _TaskScreen extends State<TaskScreen> {
                           ],
                         ),
                       ),
-                      fallbackBuilder: (context) => Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      fallbackBuilder: (context) => Center(child: CircularProgressIndicator(color: Colors.black,),),
                     )),
                 SizedBox(
                   height: 10.0,

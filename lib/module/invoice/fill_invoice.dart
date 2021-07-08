@@ -29,7 +29,6 @@ class _FillInvoiceState extends State<FillInvoice> {
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0);
-          GalleryCubit.get(context).listTask();
         }
       },
       builder: (context, state) {
@@ -274,7 +273,6 @@ class _FillInvoiceState extends State<FillInvoice> {
                               department_id: _mySelectionDepartment,
                               invoice: fillInvoice
                             );
-                            if(state is GalleryPostFillInVoiceSuccess)
                             Navigator.pop(context);
                             GalleryCubit.get(context).listFillInVoice(inVoiceId: fillInvoiceId);
                           },

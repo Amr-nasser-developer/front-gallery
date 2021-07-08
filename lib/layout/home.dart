@@ -7,6 +7,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:gallary/module/calculation/calculation_screen.dart';
 import 'package:gallary/module/customer/customer_screen.dart';
 import 'package:gallary/module/department/department_screen.dart';
+import 'package:gallary/module/invoice/fill_invoice.dart';
 import 'package:gallary/module/invoice/invoice_screen.dart';
 import 'package:gallary/module/login/login_screen.dart';
 import 'package:gallary/module/product/product_screen.dart';
@@ -47,7 +48,9 @@ class _HomePageState extends State<HomePage> {
 
                   setState(() {
                     _scanBarcode = barcodeScanRes;
+
                   });
+                  defaultNavigate(context: context, widget: FillInvoice());
               },
               icon: Icon(Icons.qr_code_scanner, color: Colors.white,)
           ),

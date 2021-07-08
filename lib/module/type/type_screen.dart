@@ -57,7 +57,6 @@ class TypeScreen extends StatelessWidget {
           );
           GalleryCubit.get(context).listType();
         }
-
       },
 
       builder: (context, state) {
