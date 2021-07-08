@@ -97,9 +97,18 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: 100.0,
                         decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.pink
                         ),
+
                         alignment: Alignment.center,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,6 +139,14 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: 100.0,
                         decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.pink
                         ),
@@ -168,6 +185,14 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: 100.0,
                         decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.pink
                         ),
@@ -201,6 +226,14 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: 100.0,
                         decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.pink
                         ),
@@ -239,6 +272,14 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: 100.0,
                         decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.pink
                         ),
@@ -272,6 +313,14 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: 100.0,
                         decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.pink
                         ),
@@ -310,6 +359,14 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: 100.0,
                         decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.pink
                         ),
@@ -343,6 +400,14 @@ class _HomePageState extends State<HomePage> {
                         child: Container(
                           height: 100.0,
                           decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3), // changes position of shadow
+                                ),
+                              ],
                               borderRadius: BorderRadius.circular(10.0),
                               color: Colors.pink
                           ),
@@ -371,7 +436,6 @@ class _HomePageState extends State<HomePage> {
             ],
           )
               : Text('no data')
-
         ),
       )
     );
