@@ -618,10 +618,7 @@ class GalleryCubit extends Cubit<GalleryStates> {
        'customer_id' : customer_id,
         'item' :item,
         'size' : size,
-        'dimentions' : {
-          'dimentions[0]' : width,
-          'dimentions[1]' : high,
-        },
+        'dimentions' : [width, high,],
          // 'dimentions[0]' : width,
          // 'dimentions[1]' : high,
         'type_id' : type_id,

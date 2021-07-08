@@ -295,7 +295,6 @@ class _InVoiceScreen extends State<InVoiceScreen> {
       },
     );
   }
-
   Widget InVoiceTable(model, context, width, state) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,

@@ -15,12 +15,14 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  List available = ['yes', 'no'];
-  String? _mySelectionAvailable;
+  List<int> available = [0,1];
+  int? _mySelectionAvailable;
   GlobalKey<dynamic> dropBottonKeyAvailable = GlobalKey();
   ScrollController controller = ScrollController();
   BuildContext? blocContext;
   GlobalKey<FormState> formKey = GlobalKey();
+  GlobalKey<FormState> formKeyUpdate= GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var arNameController = TextEditingController();
   var enNameController = TextEditingController();
   var costController = TextEditingController();
@@ -28,14 +30,14 @@ class _ProductScreenState extends State<ProductScreen> {
   var searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-
-    GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return BlocConsumer<GalleryCubit, GalleryStates>(
       listener: (context, state) {
-        if(state is GalleryUploadImageSuccess){
+        if(state is GalleryUpdateProductSuccess){
           Fluttertoast.showToast(
-              msg: 'Upload Success',
+              msg: 'Update Success',
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 3,
@@ -44,6 +46,7 @@ class _ProductScreenState extends State<ProductScreen> {
               fontSize: 16.0);
           GalleryCubit.get(context).listProduct(CreateProductSuccess: true);
         }
+
         if (state is GalleryDeleteProductSuccess) {
           Fluttertoast.showToast(
               msg: 'Delete Product Successfully',
@@ -91,7 +94,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   color: Colors.white),
             ),
           ),
-          key: scaffoldKey,
+          key: _scaffoldKey,
           body: SingleChildScrollView(
             controller: controller,
             physics: BouncingScrollPhysics(),
@@ -138,7 +141,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 ListView.separated(
                                     shrinkWrap:  true,
                                     physics: BouncingScrollPhysics(),
-                                    itemBuilder: (context, index)=>buildProduct(GalleryCubit.get(context).viewProduct[index], context,),
+                                    itemBuilder: (context, index)=>buildProduct(GalleryCubit.get(context).viewProduct[index], context, width),
                                     separatorBuilder: (context, index)=> Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                       child: Divider(color: Colors.grey[400],),
@@ -197,7 +200,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                   controller: controller,
                                     shrinkWrap: true,
                                     physics: BouncingScrollPhysics(),
-                                    itemBuilder: (context, index)=>buildProduct(GalleryCubit.get(context).searchP[index], context,),
+                                    itemBuilder: (context, index)=>buildProduct(GalleryCubit.get(context).searchP[index], context,width),
                                     separatorBuilder: (context, index)=> Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                       child: Divider(color: Colors.grey[400],),
@@ -271,7 +274,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           en: enNameController.text,
                           cost: costController.text,
                           availabilty: _mySelectionAvailable,
-                        thumb:  GalleryCubit.get(context).imageName,
+                          thumb:  GalleryCubit.get(context).imageName,
                       );
                        print('thumb : ${GalleryCubit.get(context).imageName}');
                     Navigator.pop(context);
@@ -286,7 +289,7 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
- buildProduct(product, context)=> Container(
+ buildProduct(product, context , width)=> Container(
     padding: EdgeInsets.symmetric(horizontal: 10.0),
     alignment: Alignment.center,
     color: Colors.black45,
@@ -301,23 +304,28 @@ class _ProductScreenState extends State<ProductScreen> {
           Container() :
           Image(image: NetworkImage('http://18.221.253.60:83${product['thumb']}'),fit: BoxFit.fill,)
         ),
-        SizedBox(width: 15.0,),
+        SizedBox(width: 10.0,),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${product['name']['ar']}',
-              style: TextStyle(color: Colors.white),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Container(
+              width: width * 0.28,
+              child: Text(
+                '${product['name']['ar']}',
+                style: TextStyle(color: Colors.white),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            SizedBox(width: 15.0,),
-            Text(
-              '${product['name']['en']}',
-              style: TextStyle(color: Colors.white),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Container(
+              width: width * 0.28,
+              child: Text(
+                '${product['name']['en']}',
+                style: TextStyle(color: Colors.white),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),
@@ -330,19 +338,37 @@ class _ProductScreenState extends State<ProductScreen> {
           });
 
         }, icon: Icon(Icons.delete,color: Colors.white,)),
-        IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios_sharp,color: Colors.white,))
+        IconButton(onPressed: (){
+            _showDialogUpdate(
+              context: context,
+              text: 'Update Product',
+              function: (){
+                GalleryCubit.get(context).updateProduct(
+                  ar: arNameController.text,
+                  en: enNameController.text,
+                  cost: costController.text,
+                  availabilty: _mySelectionAvailable,
+                  thumb: GalleryCubit.get(context).imageName,
+                  id: '${product['id']}' ,
+                );
+                print('thumb : ${GalleryCubit.get(context).imageName}');
+              },
+            );
+
+        },
+            icon: Icon(Icons.update,color: Colors.white,))
       ],
     ),
   );
-  Future _showDialogCreate({context, text, function,formkey}) async {
+  Future _showDialogCreate({context, text, function}) async {
     return await showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return Form(
-          key: formkey,
+          key: formKey,
           child: SingleChildScrollView(
             child: AlertDialog(
-              title: Text('Create Product'),
+              title: Text('Update Product'),
               content: StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
                   return Column(
@@ -395,13 +421,134 @@ class _ProductScreenState extends State<ProductScreen> {
                                   isExpanded: true,
                                   items: available.map((item) {
                                     return new DropdownMenuItem(
-                                      child: new Text(item),
-                                      value: item.toString(),
+                                      child: new Text('${item}'),
+                                      value: item.toInt(),
                                     );
                                   }).toList(),
-                                  onChanged: (String? newVal) {
+                                  onChanged: (newVal) {
                                     setState(() {
-                                      _mySelectionAvailable = newVal;
+                                      _mySelectionAvailable = newVal as int?;
+                                    });
+                                  },
+                                  value: _mySelectionAvailable,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              FlatButton(
+                                color: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(120)),
+                                onPressed: (){
+                                  GalleryCubit.get(context).getImage();
+                                },
+                                child: Text(
+                                  'Choose Image',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              FlatButton(
+                                color: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(120)),
+                                onPressed: function,
+                                child: Text(
+                                  text,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        FlatButton(
+                            child: Text('cancel'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                      ]);
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+  Future _showDialogUpdate({context, text, function}) async {
+    return await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Form(
+          key: formKeyUpdate,
+          child: SingleChildScrollView(
+            child: AlertDialog(
+              title: Text('Update product'),
+              content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                          child: Column(
+                            children: [
+                              defaultTextField(
+                                  textAlign: TextAlign.end,
+                                  validatorText: 'الاسم عربى',
+                                  hint: 'الاسم عربى',
+                                  type: TextInputType.name,
+                                  function: arNameController),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              defaultTextField(
+                                  validatorText: 'Enter Your EnglishName',
+                                  hint: 'EnglishName',
+                                  type: TextInputType.name,
+                                  function: enNameController),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              defaultTextField(
+                                  validatorText: 'Enter Your Cost',
+                                  hint: 'Cost',
+                                  type: TextInputType.number,
+                                  function: costController),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              Container(
+                                height: 55.0,
+                                alignment: AlignmentDirectional.center,
+                                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    color: Colors.white),
+                                child: DropdownButton(
+                                  hint: Text('Available'),
+                                  menuMaxHeight: 140.0,
+                                  key: dropBottonKeyAvailable,
+                                  isExpanded: true,
+                                  items: available.map((item) {
+                                    return new DropdownMenuItem(
+                                      child: new Text('${item}'),
+                                      value: item.toInt(),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newVal) {
+                                    setState(() {
+                                      _mySelectionAvailable = newVal as int?;
                                     });
                                   },
                                   value: _mySelectionAvailable,
