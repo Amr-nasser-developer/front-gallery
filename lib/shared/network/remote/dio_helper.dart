@@ -32,12 +32,24 @@ class DioHelper{
   {
     String token = await CashHelper.getData(key: 'token');
     if(token != null){
-      dio!.options.headers = {'Accept':'application/json',
-        'Authorization': 'Bearer $token'
+      dio!.options.headers = {
+        'Accept':'application/json',
+        'Authorization': 'Bearer $token',
          };
     }
 
     return await dio!.post(url!, queryParameters: query, data: data);
   }
+  static Future<Response> uploadImage({@required String? url , Map<String , dynamic>? query,data,
+    String? token
+  })async
+  {
+      dio!.options.headers = {
+        'Accept':'application/json',
+        'Content-Type':'multipart/form-data'
+      };
+    return await dio!.post(url!, queryParameters: query, data: data);
+  }
+
 
 }

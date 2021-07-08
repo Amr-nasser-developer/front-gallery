@@ -22,6 +22,7 @@ Widget defaultTextField({
   TextInputType? type,
   TextEditingController? function,
   textAlign = TextAlign.start,
+  int max = 1
 }) =>
     TextFormField(
       validator: (value) {
@@ -35,6 +36,7 @@ Widget defaultTextField({
         print(value);
       },
       controller: function,
+      maxLines: max,
       textAlign: textAlign,
       cursorColor: Colors.orangeAccent,
       obscureText: obscure,
@@ -110,6 +112,7 @@ Widget dropButton({value ,function, items, hint})=> Container(
       color: Colors.white
   ),
   child: DropdownButton<String>(
+    menuMaxHeight: 120.0,
     hint: hint,
     value: value,
     icon: const Icon(Icons.arrow_downward,color: Colors.black38,size: 20,),
@@ -120,8 +123,7 @@ Widget dropButton({value ,function, items, hint})=> Container(
         color: Colors.black
     ),
     onChanged: function,
-    items: items
-        .map<DropdownMenuItem<String>>((String value) {
+    items: items.map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(
         value: value,
         child: Text(value),
@@ -129,3 +131,4 @@ Widget dropButton({value ,function, items, hint})=> Container(
     }).toList(),
   ),
 );
+

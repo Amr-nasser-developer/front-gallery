@@ -1,21 +1,55 @@
-import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallary/layout/cubit/cubit.dart';
 import 'package:gallary/layout/cubit/state.dart';
 import 'package:gallary/shared/components.dart';
 
-class CustomerScreen extends StatelessWidget {
+class CustomerScreen extends StatefulWidget {
+  @override
+  _CustomerScreenState createState() => _CustomerScreenState();
+}
+
+class _CustomerScreenState extends State<CustomerScreen> {
+
+  ScrollController controller = ScrollController();
+  BuildContext? blocContext;
+
+  // @override
+  // void initState()
+  // {
+  //   super.initState();
+  //
+  //   controller.addListener(()
+  //   {
+  //     if (controller.offset >= controller.position.maxScrollExtent &&
+  //         !controller.position.outOfRange)
+  //     {
+  //       print('bottom bottom');
+  //
+  //       if(GalleryCubit.get(blocContext).currentPageCustomer <= GalleryCubit.get(blocContext).totalPageCustomer)
+  //         GalleryCubit.get(blocContext).listCustomerMore();
+  //     }
+  //   });
+  // }
+
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+
   GlobalKey<FormState> formKey = GlobalKey();
+
   final enNameController = TextEditingController();
+
   final arNameController = TextEditingController();
+
   final phoneController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return BlocConsumer<GalleryCubit, GalleryStates>(
       listener: (context, state) {
         if (state is GalleryDeleteCustomerSuccess) {
@@ -28,7 +62,7 @@ class CustomerScreen extends StatelessWidget {
               textColor: Colors.white,
               fontSize: 16.0
           );
-          GalleryCubit.get(context).getCustomer();
+           GalleryCubit.get(context).getCustomer(CreateCustomerSuccess: true);
         }
         if (state is GalleryCreateCustomerSuccess) {
           Fluttertoast.showToast(
@@ -40,7 +74,10 @@ class CustomerScreen extends StatelessWidget {
               textColor: Colors.white,
               fontSize: 16.0
           );
-          GalleryCubit.get(context).getCustomer();
+           GalleryCubit.get(context).getCustomer(CreateCustomerSuccess: true);
+          setState(() {
+
+          });
         }
         if (state is GalleryUpdateCustomerSuccess) {
           Fluttertoast.showToast(
@@ -52,11 +89,11 @@ class CustomerScreen extends StatelessWidget {
               textColor: Colors.white,
               fontSize: 16.0
           );
-          GalleryCubit.get(context).getCustomer();
+          GalleryCubit.get(context).getCustomer(CreateCustomerSuccess: true);
         }
       },
       builder: (context, state) {
-        var search = GalleryCubit.get(context).searchC;
+        blocContext = context;
         return Scaffold(
           key: scaffoldKey,
           appBar: AppBar(
@@ -69,177 +106,262 @@ class CustomerScreen extends StatelessWidget {
                   color: Colors.white),
             ),
           ),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: TextFormField(
-                  style: TextStyle(
-                      color: Colors.white
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'inputData';
-                    }
-                    return null;
-                  },
-                  controller: GalleryCubit.get(context).searchCustomerController,
-                  keyboardType: TextInputType.text,
-                  onFieldSubmitted: (value) {},
-                  onChanged: (value) {
-                    GalleryCubit.get(context).searchCustomer(value);
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Search',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.search),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: TextFormField(
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'inputData';
+                      }
+                      return null;
+                    },
+                    controller: GalleryCubit.get(context).searchCustomerController,
+                    keyboardType: TextInputType.text,
+                    onFieldSubmitted: (value) {},
+                    onChanged: (value) {
+                      GalleryCubit.get(context).searchCustomer(value);
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Search',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.search),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.white),
-                    child: Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: ConditionalBuilder(
-                        condition: state is! GallerySearchCustomerSuccess,
-                        builder: (context)=> Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                    child: Text(
-                                      '    Id',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      '   Arabic Name',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      'English Name',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      '     phone',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      '                               ',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      '                               ',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )
-                                ),
-                              ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Container(
+                    width: width * 0.99,
+                      height: height * 0.50,
+                      alignment: Alignment.topCenter,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Conditional.single(
+                          context: context,
+                          conditionBuilder: (context)=> state is! GallerySearchCustomerSuccess,
+                          widgetBuilder: (context)=> SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width:width * 0.75,
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                            child: Text(
+                                              '   Arabic\n   Name',
+                                              style: TextStyle(
+                                                  color: Colors.black, fontWeight: FontWeight.bold),
+                                            )),
+                                        Expanded(
+
+                                            child: Text(
+                                              'English\nName',
+                                              style: TextStyle(
+                                                  color: Colors.black, fontWeight: FontWeight.bold),
+                                            )),
+                                        Expanded(
+
+                                            child: Text(
+                                              'phone',
+                                              style: TextStyle(
+                                                  color: Colors.black, fontWeight: FontWeight.bold),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  SingleChildScrollView(
+                                    child: Container(
+                                      height: height*0.50,
+                                      width: width * 1.2,
+                                      child: ListView.separated(
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) => customerSearch(
+                                            GalleryCubit.get(context)
+                                                .customer[index],
+                                            context,
+                                            width
+                                          ),
+                                          separatorBuilder: (context, index) => Divider(
+                                            height: 2,
+                                          ),
+                                          itemCount: GalleryCubit.get(context)
+                                              .customer
+                                              .length),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children:
+                                    [
+                                      Container(),
+                                      if(state is! GalleryListCustomerMoreLoading && GalleryCubit.get(context).currentPageCustomer < GalleryCubit.get(context).totalPageCustomer)
+                                        MaterialButton(
+                                          height: 40.0,
+                                          color: Colors.white,
+                                          onPressed: ()
+                                          {
+                                            if(GalleryCubit.get(context).currentPageCustomer < GalleryCubit.get(context).totalPageCustomer)
+                                              GalleryCubit.get(context).listCustomerMore();
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'Load More',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10.0,
+                                              ),
+                                              Icon(
+                                                Icons.arrow_downward,
+                                                size: 16.0,
+                                                color: Colors.black,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      if(state is GalleryListCustomerMoreLoading)
+                                        CircularProgressIndicator(),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                ],
+                              ),
                             ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            ListView.separated(
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) => customerSearch(
-                                  GalleryCubit.get(context)
-                                      .customer[index],
-                                  context,
-                                ),
-                                separatorBuilder: (context, index) => Divider(
-                                  height: 2,
-                                ),
-                                itemCount: GalleryCubit.get(context)
-                                    .customer
-                                    .length),
-                          ],
+                          ),
+                          fallbackBuilder: (context)=> SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: width * 0.75,
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                            child: Text(
+                                              '   Arabic\n   Name',
+                                              style: TextStyle(
+                                                  color: Colors.black, fontWeight: FontWeight.bold),
+                                            )),
+                                        Expanded(
+                                            child: Text(
+                                              'English\nName',
+                                              style: TextStyle(
+                                                  color: Colors.black, fontWeight: FontWeight.bold),
+                                            )),
+                                        Expanded(
+                                            child: Text(
+                                              'phone',
+                                              style: TextStyle(
+                                                  color: Colors.black, fontWeight: FontWeight.bold),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  SingleChildScrollView(
+                                    child: Container(
+                                      height: height*0.50,
+                                      width: width * 1.2,
+                                      child: ListView.separated(
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) => customerSearch(
+                                              GalleryCubit.get(context)
+                                                  .searchC[index],
+                                              context,
+                                              width
+                                          ),
+                                          separatorBuilder: (context, index) => Divider(
+                                            height: 2,
+                                          ),
+                                          itemCount: GalleryCubit.get(context)
+                                              .searchC
+                                              .length),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children:
+                                    [
+                                      Container(),
+                                      if(state is! GalleryListCustomerMoreLoading && GalleryCubit.get(context).currentPageCustomer <= GalleryCubit.get(context).totalPageCustomer)
+                                        MaterialButton(
+                                          height: 40.0,
+                                          color: Colors.white,
+                                          onPressed: ()
+                                          {
+                                            if(GalleryCubit.get(context).currentPageCustomer <= GalleryCubit.get(context).totalPageCustomer)
+                                              GalleryCubit.get(context).listCustomerMore();
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'Load More',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10.0,
+                                              ),
+                                              Icon(
+                                                Icons.arrow_downward,
+                                                size: 16.0,
+                                                color: Colors.black,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      if(state is GalleryListCustomerMoreLoading)
+                                        CircularProgressIndicator(),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ),
                         ),
-                        fallback: (context)=> Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                    child: Text(
-                                      '    Id',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      '   Arabic Name',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      'English Name',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      '     phone',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      '                               ',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )),
-                                Expanded(
-                                    child: Text(
-                                      '                               ',
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold),
-                                    )
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            ListView.separated(
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) => customerSearch(
-                                  GalleryCubit.get(context)
-                                      .searchC[index],
-                                  context,
-                                ),
-                                separatorBuilder: (context, index) => Divider(
-                                  height: 2,
-                                ),
-                                itemCount: GalleryCubit.get(context)
-                                    .searchC
-                                    .length),
-                          ],
-                        ),
-                      ),
-                    )
-                ),
-              )
-            ],
+                      )
+                  ),
+                )
+              ],
+            ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
@@ -290,7 +412,7 @@ class CustomerScreen extends StatelessWidget {
                             onPressed: (){
                               if(formKey.currentState!.validate()){
                                 GalleryCubit.get(context).createCustomer(
-                                 arName: arNameController.text,
+                                  arName: arNameController.text,
                                   enName: enNameController.text,
                                   phone: phoneController.text,
                                 );
@@ -326,29 +448,29 @@ class CustomerScreen extends StatelessWidget {
     );
   }
 
-
-  Widget customerSearch(search, context) => Column(
+  Widget customerSearch(search, context, width) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
       Container(
+        width: width * 1.2,
         alignment: Alignment.center,
         padding: EdgeInsetsDirectional.only(start: 15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(child: Text('${search['id']}')),
-            Expanded(child: Text('      ${search['name']['ar']}')),
-            Expanded(child: Text('      ${search['name']['en']}')),
+            Expanded(child: Text('${search['name']['ar']}')),
+            Expanded(child: Text('${search['name']['en']}')),
             Expanded(child: Text('${search['phone']}')),
             Expanded(
-                child: IconButton(
-                    onPressed: () {
-                      GalleryCubit.get(context)
-                          .deleteCustomer(id: search['id']);
-                    },
-                    icon: Icon(Icons.delete))),
+              child: IconButton(
+                  onPressed: () {
+                    GalleryCubit.get(context)
+                        .deleteCustomer(id: search['id']);
+                  },
+                  icon: Icon(      Icons.delete)),
+            ),
             Expanded(
               child: CircleAvatar(
                 child: IconButton(
@@ -436,7 +558,8 @@ class CustomerScreen extends StatelessWidget {
                     icon: Icon(
                       Icons.update,
                       size: 16.0,
-                    )),
+                    )
+                ),
                 radius: 16.0,
               ),
             ),
